@@ -12,7 +12,7 @@ OUT_DIR = Path(__file__).resolve().parent / "qr"
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("url", help="Final public https:// address of the website")
-    parser.add_argument("--name", default="rio-cafe-qr", help="Output file name without extension")
+    parser.add_argument("--name", default="thecoffeeguy-qr", help="Output file name without extension")
     args = parser.parse_args()
 
     parsed = urlparse(args.url)
