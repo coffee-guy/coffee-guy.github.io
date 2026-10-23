@@ -9,7 +9,10 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Coffee Guy – South Indian filter coffee">
   <meta property="og:description" content="Classic Mysore-style filter coffee. Small 15 kr, medium 20 kr.">
-  <link rel="icon" type="image/svg+xml" href="images/filter-coffee.svg">
+  <meta property="og:image" content="https://coffee-guy.github.io/images/logo.png">
+  <meta property="og:url" content="https://coffee-guy.github.io/">
+  <link rel="icon" type="image/svg+xml" href="images/logo.svg">
+  <link rel="apple-touch-icon" href="images/logo.png">
   <script>
     // ?lang=sv|en wins, otherwise the browser language.
     (function () {
@@ -40,7 +43,7 @@
 
     .hero {
       position: relative;
-      padding: 4.5rem 1.5rem 3rem;
+      padding: 4rem 1.5rem 3.5rem;
       text-align: center;
       color: var(--cream);
       background: radial-gradient(120% 80% at 50% 0%, var(--roast) 0%, var(--espresso) 65%);
@@ -69,7 +72,7 @@
       box-shadow: 0 6px 18px rgba(0, 0, 0, .3);
     }
     @media (hover: hover) { .btn { transition: transform .15s ease; } .btn:hover { transform: translateY(-2px); } }
-    .hero__art { width: min(62vw, 250px); margin: 2rem auto 0; }
+    .hero__logo { width: min(60vw, 230px); margin: 0 auto 1.25rem; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .4)); }
 
     .section { max-width: 60rem; margin: 0 auto; padding: 3.5rem 1.25rem; text-align: center; }
     .section h2 { margin: 0 0 .4rem; font: 700 clamp(1.9rem, 7vw, 2.6rem)/1.15 var(--serif); color: var(--espresso); }
@@ -118,11 +121,11 @@
 <body>
   <header class="hero">
     <button class="lang" id="lang" type="button" hidden>Svenska</button>
+    <img class="hero__logo" src="images/logo.svg" alt="" width="400" height="400">
     <p class="eyebrow"><span lang="en">Classic Mysore filter coffee</span><span lang="sv">Klassiskt Mysore-filterkaffe</span></p>
     <h1>Coffee Guy</h1>
     <p class="lead"><span lang="en">Strong, frothy South Indian filter coffee, served hot.</span><span lang="sv">Starkt, skummigt sydindiskt filterkaffe, serverat varmt.</span></p>
     <a class="btn" href="#menu"><span lang="en">See the menu</span><span lang="sv">Se menyn</span></a>
-    <img class="hero__art" src="images/filter-coffee.svg" alt="" width="240" height="224">
   </header>
 
   <main>
