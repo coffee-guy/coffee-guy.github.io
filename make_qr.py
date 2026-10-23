@@ -1,4 +1,4 @@
-"""Generate the website QR code in ./qr: a plain code and a friendly "SCAN ME" poster, each as PNG and SVG."""
+"""Generate the website QR code in ./qr: a plain code and a "SCAN ME" poster, each as PNG and SVG."""
 
 import argparse
 import os
@@ -12,32 +12,52 @@ import segno
 OUT_DIR = Path(__file__).resolve().parent / "qr"
 LOGO = Path(__file__).resolve().parent / "docs" / "images" / "logo.svg"
 
-ESPRESSO, SAFFRON, CREAM, CORAL, CORAL_DARK = "#2b1810", "#f3b23c", "#fff4e3", "#ff6b5e", "#d94a3d"
+ESPRESSO, SAFFRON, CREAM, PAPER = "#2b1810", "#f3b23c", "#fff4e3", "#f6ecd9"
 
-# "SCAN ME" outlined from Lilita One (SIL OFL); 100 units tall.
-SCAN_ME_WIDTH = 602.4
-SCAN_ME_PATH = (
-    "M10.8 65.2Q13.6 67.3 20.2 71Q26.8 74.8 32.9 74.8Q38.9 74.8 38.9 70Q38.9 67.9 37.2 66.3Q35.5 64.6 31 62.5Q26.4 60.3 24.1 59.1Q21.8 57.9 18 55.1Q14.3 52.4 12.3 49.4Q6.6 41.2 6.6 28.7Q6.6 16.1 15.9 7.5Q25.2 -1.1 40.4 -1.1Q50.6 -1.1 59.3 1.1Q68 3.3 68.3 6.8Q68.3 7.3 68.3 7.7Q68.3 12.7 65.2 20.3Q62.1 28 60.8 28.8Q51.6 24.1 44.4 24.1Q37.2 24.1 37.2 29.2Q37.2 32.4 42.5 34.8Q43.7 35.4 45.8 36.4Q47.9 37.4 50.7 38.7Q53.5 40.1 56.7 42.2Q59.9 44.2 63.6 47.6Q71.2 54.8 71.2 66.5Q71.2 81.7 62.8 91.4Q54.4 101.1 36.8 101.4Q28.2 101.4 21.3 100Q14.4 98.6 9.3 94.4Q4.1 90.3 4.1 84.5Q4.1 78.6 6.3 72.8Q8.4 67 10.8 65.2Z"
-    "M145.5 29.4Q144.8 29.4 143.9 28.6Q142.9 27.8 139.6 26.9Q136.2 26 133.8 26Q125.5 26 120.5 31.8Q115.4 37.7 115.4 49.7Q115.4 61.8 120.6 67.6Q125.8 73.5 133.8 73.5Q137.1 73.5 141.2 72.5Q145.2 71.6 146.9 69.9Q147.2 69.6 148.1 69.6Q148.9 69.6 151.3 72.8Q153.6 76 155.6 81.2Q157.6 86.4 157.6 89.3Q157.6 94.9 149.1 98.1Q140.5 101.4 128.8 101.4Q110 101.4 97.9 88.2Q85.7 74.9 85.7 50.7Q85.7 26.5 98.2 12.7Q110.7 -1.1 129.4 -1.1Q139.8 -1.1 147.7 1.8Q155.6 4.7 155.6 9.7Q155.6 14.7 151.9 22Q148.1 29.4 145.5 29.4Z"
-    "M241.4 100.3Q229 100.3 228 96.3L223.3 77.9H200.6L196.4 95.6Q195.6 100 182.7 100Q175.9 100 172.6 99.2Q169.3 98.4 169.3 98L194.6 1.4Q194.6 0.3 214.1 0.3Q233.7 0.3 233.7 1.4L258.3 98.1Q258.3 99.1 251.8 99.7Q245.2 100.3 241.4 100.3ZM204.1 59.8H219.1L212.7 30.2H211.8Z"
-    "M351.6 96.9Q351.6 99.9 338.2 99.9Q324.8 99.9 323.7 97.7L299.9 53.2V97.6Q299.9 100.1 286.7 100.1Q273.5 100.1 273.5 97.6V2.1Q273.5 0 284.7 0Q289.2 0 295.1 0.8Q301 1.6 302.3 3.7L325.1 47.6V2.9Q325.1 0.1 338.4 0.1Q351.6 0.1 351.6 2.9Z"
-    "M504 100.1Q491.3 100.1 491.3 97.3L488.3 40.1L470.9 98Q470.3 99.7 461.2 99.7Q452.1 99.7 451.8 98.1L433.8 39.5L431.8 96.4Q431.7 98.6 426.4 99.4Q421.1 100.1 417.6 100.1Q414.1 100.1 410.8 99.7Q404 98.7 404.1 96.1L407.4 3.4Q407.4 0 424.8 0Q430 0 437.4 0.8Q444.8 1.6 445.6 3.9L461.6 48.8L475.6 3.7Q476.9 0 495.3 0Q500.6 0 507.9 0.8Q515.3 1.6 515.3 3.6L519.4 97.1Q519.4 98.7 513.8 99.4Q508.3 100.1 504 100.1Z"
-    "M585.6 39.8Q588.3 39.8 588.3 49.8Q588.3 52.8 587.7 56.8Q587 60.9 585.3 60.9H567.2V75.2H593.4Q595.9 75.2 596.7 81.5Q597.1 84.2 597.1 87.2Q597.1 90.3 596.3 95.1Q595.4 100 593.4 100H544.7Q539.2 100 539.2 95.6V3.9Q539.2 0.1 542.5 0.1H593.6Q596.6 0.1 596.6 12.8Q596.6 25.4 593.6 25.4H567.2V39.8Z"
-)
-
-# "COFFEE GUY" outlined the same way.
-BRAND_WIDTH = 824.4
-BRAND_PATH = (
-    "M64.1 29.4Q63.3 29.4 62.4 28.6Q61.5 27.8 58.1 26.9Q54.8 26 52.4 26Q44.1 26 39 31.8Q34 37.7 34 49.7Q34 61.8 39.2 67.6Q44.4 73.5 52.4 73.5Q55.6 73.5 59.7 72.5Q63.8 71.6 65.5 69.9Q65.8 69.6 66.6 69.6Q67.5 69.6 69.8 72.8Q72.2 76 74.2 81.2Q76.2 86.4 76.2 89.3Q76.2 94.9 67.6 98.1Q59.1 101.4 47.4 101.4Q28.5 101.4 16.4 88.2Q4.3 74.9 4.3 50.7Q4.3 26.5 16.8 12.7Q29.2 -1.1 47.9 -1.1Q58.3 -1.1 66.3 1.8Q74.2 4.7 74.2 9.7Q74.2 14.7 70.4 22Q66.6 29.4 64.1 29.4Z"
-    "M138.2 101.4Q118.1 101.4 105.5 88.3Q92.9 75.2 92.9 50Q92.9 24.8 105.6 11.8Q118.4 -1.1 138.6 -1.1Q158.8 -1.1 171.2 11.6Q183.6 24.4 183.6 50.3Q183.6 76.2 170.9 88.8Q158.2 101.4 138.2 101.4ZM138.2 26.2Q131.4 26.2 126.7 32.5Q122.1 38.8 122.1 50.1Q122.1 61.5 126.5 67.5Q131 73.6 138.2 73.6Q145.4 73.6 149.9 67.5Q154.4 61.3 154.4 49.9Q154.4 38.5 149.7 32.4Q145.1 26.2 138.2 26.2Z"
-    "M256.9 0.1Q259.3 0.1 259.3 12.8Q259.3 25.4 256.9 25.4H230.8V41.7H248.2Q250.6 41.7 250.6 52.7Q250.6 63.8 248.4 63.8H230.8V98.1Q230.8 100.1 225.5 100.8Q220.1 101.4 216.5 101.4L209.8 101.1Q202.9 100.3 202.9 98.3V3.9Q202.9 1.6 203.8 0.9Q204.7 0.1 206.6 0.1Z"
-    "M332.8 0.1Q335.2 0.1 335.2 12.8Q335.2 25.4 332.8 25.4H306.7V41.7H324.1Q326.5 41.7 326.5 52.7Q326.5 63.8 324.3 63.8H306.7V98.1Q306.7 100.1 301.4 100.8Q296 101.4 292.4 101.4L285.7 101.1Q278.7 100.3 278.7 98.3V3.9Q278.7 1.6 279.7 0.9Q280.6 0.1 282.5 0.1Z"
-    "M401.7 39.8Q404.4 39.8 404.4 49.8Q404.4 52.8 403.8 56.8Q403.1 60.9 401.4 60.9H383.3V75.2H409.6Q412 75.2 412.8 81.5Q413.3 84.2 413.3 87.2Q413.3 90.3 412.4 95.1Q411.6 100 409.6 100H360.8Q355.3 100 355.3 95.6V3.9Q355.3 0.1 358.6 0.1H409.7Q412.7 0.1 412.7 12.8Q412.7 25.4 409.7 25.4H383.3V39.8Z"
-    "M480.6 39.8Q483.3 39.8 483.3 49.8Q483.3 52.8 482.7 56.8Q482 60.9 480.3 60.9H462.2V75.2H488.4Q490.9 75.2 491.7 81.5Q492.2 84.2 492.2 87.2Q492.2 90.3 491.3 95.1Q490.4 100 488.4 100H439.7Q434.2 100 434.2 95.6V3.9Q434.2 0.1 437.5 0.1H488.6Q491.6 0.1 491.6 12.8Q491.6 25.4 488.6 25.4H462.2V39.8Z"
-    "M601.3 70.2L601.6 50.8Q601.6 48.8 605.7 48.1Q609.8 47.5 612.6 47.5L618.1 47.9Q623.5 48.8 623.5 50.9L623 95.6Q620.1 97.6 611.5 99.5Q602.9 101.4 591.7 101.4Q571 101.4 558.3 88Q545.6 74.6 545.6 48.6Q545.6 26.5 558.1 12.7Q570.5 -1.1 592.4 -1.1Q602.4 -1.1 610.5 0.8Q618.5 2.7 621.5 6Q621.7 7.1 621.7 10.3Q621.7 13.4 619.5 19.2Q617.4 25 614.7 27.8Q612 30.7 610.8 30.7Q609.6 30.7 608.2 29.6Q606.8 28.5 602.9 27.3Q598.9 26.1 595.1 26.1Q586.3 26.1 580.8 31.8Q575.3 37.5 575.3 49.5Q575.3 61.5 581 67.7Q586.6 73.9 593.9 73.9Q601.3 73.9 601.3 70.2Z"
-    "M692.3 3Q692.3 0.1 707.8 0.1Q723.3 0.1 723.3 3V68.5Q723.3 83 712.8 92.2Q702.4 101.4 684.1 101.4Q665.8 101.4 654.3 91.9Q642.8 82.5 642.8 66.3V3.1Q642.8 0.3 658.3 0.3Q673.8 0.3 673.8 3.1V67.5Q673.8 70.3 676.7 72Q679.9 73.8 683.3 73.8Q686.7 73.8 689.5 72.2Q692.3 70.6 692.3 67.5Z"
-    "M793.4 4.9Q795.3 -0.1 811.7 -0.1Q815.8 -0.1 821.5 0.4Q827.1 1 826.7 1.9L797 61.5V96.3Q797 98.7 789.2 99.7Q785.2 100.3 781.3 100.3Q777.5 100.3 773.6 99.9Q765.8 98.9 765.8 96.3V62.3L735.1 2.1Q734.5 1.3 740.9 0.5Q747.4 -0.3 751.8 -0.3Q769.3 -0.3 771 4.9L781.5 34Z"
-)
+# Bebas Neue (SIL OFL) outlined as vector paths; capitals are 100 units tall.
+GLYPHS = {
+    "A": (57.3, "M18 0H39.3L55.6 100H39.9L37 80.1V80.4H19.1L16.3 100H1.7ZM35.1 66.9 28.1 17.4H27.9L21 66.9Z"),
+    "B": (57.7, "M5.9 0H29.6Q41.7 0 47.3 5.6Q52.9 11.3 52.9 23V27Q52.9 34.7 50.4 39.6Q47.9 44.4 42.7 46.6V46.9Q54.4 50.9 54.4 67.7V76.3Q54.4 87.9 48.4 93.9Q42.3 100 30.6 100H5.9ZM27.7 40.7Q32.4 40.7 34.8 38.3Q37.1 35.9 37.1 30.1V24.6Q37.1 19.1 35.2 16.7Q33.3 14.3 29.1 14.3H21.6V40.7ZM30.6 85.7Q34.7 85.7 36.7 83.5Q38.7 81.3 38.7 75.9V67.1Q38.7 60.3 36.4 57.6Q34 55 28.6 55H21.6V85.7Z"),
+    "C": (54.7, "M4.9 76.9V23.1Q4.9 11.4 10.8 5Q16.7 -1.4 28 -1.4Q39.3 -1.4 45.2 5Q51.1 11.4 51.1 23.1V33.7H36.3V22.1Q36.3 12.9 28.4 12.9Q20.6 12.9 20.6 22.1V78Q20.6 87.1 28.4 87.1Q36.3 87.1 36.3 78V62.7H51.1V76.9Q51.1 88.6 45.2 95Q39.3 101.4 28 101.4Q16.7 101.4 10.8 95Q4.9 88.6 4.9 76.9Z"),
+    "D": (58.0, "M5.9 0H29.9Q41.6 0 47.4 6.3Q53.3 12.6 53.3 24.7V75.3Q53.3 87.4 47.4 93.7Q41.6 100 29.9 100H5.9ZM29.6 85.7Q33.4 85.7 35.5 83.4Q37.6 81.1 37.6 76V24Q37.6 18.9 35.5 16.6Q33.4 14.3 29.6 14.3H21.6V85.7Z"),
+    "E": (51.9, "M5.9 0H48.7V14.3H21.6V40.7H43.1V55H21.6V85.7H48.7V100H5.9Z"),
+    "F": (49.1, "M5.9 0H47.4V14.3H21.6V42.1H41.9V56.4H21.6V100H5.9Z"),
+    "G": (55.9, "M4.7 76.3V23.7Q4.7 11.6 10.7 5.1Q16.7 -1.4 28.1 -1.4Q39.6 -1.4 45.6 5.1Q51.6 11.6 51.6 23.7V32.3H36.7V22.7Q36.7 12.9 28.6 12.9Q20.4 12.9 20.4 22.7V77.4Q20.4 87.1 28.6 87.1Q36.7 87.1 36.7 77.4V57.9H28.9V43.6H51.6V76.3Q51.6 88.4 45.6 94.9Q39.6 101.4 28.1 101.4Q16.7 101.4 10.7 94.9Q4.7 88.4 4.7 76.3Z"),
+    "H": (60.0, "M5.9 0H21.6V40.7H38.4V0H54.1V100H38.4V55H21.6V100H5.9Z"),
+    "I": (27.4, "M5.9 0H21.6V100H5.9Z"),
+    "J": (37.9, "M2.3 100V85.7Q4.6 86.3 7.4 86.3Q12.1 86.3 14.4 83.9Q16.7 81.6 16.7 76.7V0H32.4V76.3Q32.4 88.6 26.8 94.6Q21.1 100.6 9.6 100.6Q5.3 100.6 2.3 100Z"),
+    "K": (59.1, "M5.9 0H21.6V42.1L41.6 0H57.3L38.6 36.7L57.6 100H41.1L27.9 55.4L21.6 68.1V100H5.9Z"),
+    "L": (49.1, "M5.9 0H21.6V85.7H47.4V100H5.9Z"),
+    "M": (76.9, "M5.9 0H28.3L38.3 71.6H38.6L48.6 0H71V100H56.1V24.3H55.9L44.4 100H31.3L19.9 24.3H19.6V100H5.9Z"),
+    "N": (61.0, "M5.9 0H25.6L40.9 59.9H41.1V0H55.1V100H39L20.1 27H19.9V100H5.9Z"),
+    "O": (57.1, "M4.7 76.3V23.7Q4.7 11.7 10.9 5.1Q17 -1.4 28.6 -1.4Q40.1 -1.4 46.3 5.1Q52.4 11.7 52.4 23.7V76.3Q52.4 88.3 46.3 94.9Q40.1 101.4 28.6 101.4Q17 101.4 10.9 94.9Q4.7 88.3 4.7 76.3ZM36.7 77.3V22.7Q36.7 12.9 28.6 12.9Q20.4 12.9 20.4 22.7V77.3Q20.4 87.1 28.6 87.1Q36.7 87.1 36.7 77.3Z"),
+    "P": (55.1, "M5.9 0H29Q40.7 0 46.6 6.3Q52.4 12.6 52.4 24.7V34.6Q52.4 46.7 46.6 53Q40.7 59.3 29 59.3H21.6V100H5.9ZM29 45Q32.9 45 34.8 42.9Q36.7 40.7 36.7 35.6V23.7Q36.7 18.6 34.8 16.4Q32.9 14.3 29 14.3H21.6V45Z"),
+    "Q": (57.1, "M39 99.7Q34.6 101.4 28.6 101.4Q17 101.4 10.9 94.9Q4.7 88.3 4.7 76.3V23.7Q4.7 11.7 10.9 5.1Q17 -1.4 28.6 -1.4Q40.1 -1.4 46.3 5.1Q52.4 11.7 52.4 23.7V76.3Q52.4 86.3 48 92.7Q48.9 94.1 50.1 94.6Q51.4 95 53.9 95H56.3V109.3H52.1Q41.4 109.3 39 99.7ZM36.7 77.3V22.7Q36.7 12.9 28.6 12.9Q20.4 12.9 20.4 22.7V77.3Q20.4 87.1 28.6 87.1Q36.7 87.1 36.7 77.3Z"),
+    "R": (57.6, "M5.9 0H29.1Q41.3 0 46.9 5.6Q52.4 11.3 52.4 23V29.1Q52.4 44.7 42.1 48.9V49.1Q47.9 50.9 50.2 56.1Q52.6 61.4 52.6 70.3V87.9Q52.6 92.1 52.9 94.8Q53.1 97.4 54.3 100H38.3Q37.4 97.6 37.1 95.4Q36.9 93.3 36.9 87.7V69.4Q36.9 62.6 34.6 59.9Q32.4 57.1 27 57.1H21.6V100H5.9ZM27.3 42.9Q32 42.9 34.4 40.4Q36.7 38 36.7 32.3V24.6Q36.7 19.1 34.8 16.7Q32.9 14.3 28.7 14.3H21.6V42.9Z"),
+    "S": (53.1, "M3.1 76.3V70.6H18V77.4Q18 87.1 26.1 87.1Q30.1 87.1 32.2 84.8Q34.3 82.4 34.3 77.1Q34.3 70.9 31.4 66.1Q28.6 61.3 20.9 54.6Q11.1 46 7.3 39.1Q3.4 32.1 3.4 23.4Q3.4 11.6 9.4 5.1Q15.4 -1.4 26.9 -1.4Q38.1 -1.4 43.9 5.1Q49.7 11.6 49.7 23.7V27.9H34.9V22.7Q34.9 17.6 32.9 15.2Q30.9 12.9 27 12.9Q19.1 12.9 19.1 22.4Q19.1 27.9 22.1 32.6Q25 37.3 32.7 44Q42.6 52.6 46.3 59.6Q50 66.6 50 76Q50 88.3 43.9 94.9Q37.9 101.4 26.3 101.4Q14.9 101.4 9 94.9Q3.1 88.4 3.1 76.3Z"),
+    "T": (52.0, "M18.1 14.3H1.7V0H50.3V14.3H33.9V100H18.1Z"),
+    "U": (57.4, "M5.3 76.3V0H21V77.4Q21 82.6 23.1 84.9Q25.1 87.1 29 87.1Q32.9 87.1 34.9 84.9Q37 82.6 37 77.4V0H52.1V76.3Q52.1 88.4 46.1 94.9Q40.1 101.4 28.7 101.4Q17.3 101.4 11.3 94.9Q5.3 88.4 5.3 76.3Z"),
+    "V": (54.6, "M1.7 0H17.6L27.9 77.6H28.1L38.4 0H52.9L37.7 100H16.9Z"),
+    "W": (79.6, "M2.1 0H17.3L24.3 76.9H24.6L32 0H49.1L56.6 76.9H56.9L63.9 0H77.4L67.3 100H47.7L40.6 32.6H40.3L33.1 100H12.3Z"),
+    "X": (58.0, "M19.7 48.9 2.4 0H19L29.6 32.3H29.9L40.7 0H55.6L38.3 48.9L56.4 100H39.9L28.4 65.1H28.1L16.4 100H1.6Z"),
+    "Y": (56.3, "M20.3 57.4 1.3 0H18L28.7 36.7H29L39.7 0H55L36 57.4V100H20.3Z"),
+    "Z": (51.7, "M2.7 86 31.9 14.3H4.1V0H48.7V14L19.6 85.7H48.7V100H2.7Z"),
+    "0": (57.1, "M4.7 76.3V23.7Q4.7 11.7 10.9 5.1Q17 -1.4 28.6 -1.4Q40.1 -1.4 46.3 5.1Q52.4 11.7 52.4 23.7V76.3Q52.4 88.3 46.3 94.9Q40.1 101.4 28.6 101.4Q17 101.4 10.9 94.9Q4.7 88.3 4.7 76.3ZM36.7 77.3V22.7Q36.7 12.9 28.6 12.9Q20.4 12.9 20.4 22.7V77.3Q20.4 87.1 28.6 87.1Q36.7 87.1 36.7 77.3Z"),
+    "1": (57.1, "M27.9 23.7H11.4V12.6Q18.1 12.6 22.2 11.4Q26.3 10.3 28.7 7.6Q31.1 5 33 0H43.6V100H27.9Z"),
+    "2": (57.1, "M5.6 89.1Q5.6 78.4 9 70.8Q12.4 63.1 21.3 53.9Q30 44.6 33.4 38Q36.7 31.4 36.7 24.3Q36.7 17.9 34.6 15.4Q32.6 12.9 28.6 12.9Q20.4 12.9 20.4 22.7V33.4H5.6V23.7Q5.6 11.6 11.6 5.1Q17.6 -1.4 29 -1.4Q40.4 -1.4 46.4 5.1Q52.4 11.6 52.4 23.7Q52.4 32.9 48.1 41.6Q43.7 50.3 33 61.6Q26 69 23.6 73.6Q21.1 78.3 21.1 83.6V85.7H51V100H5.6Z"),
+    "3": (57.1, "M4.7 76.6V68.4H19.6V77.3Q19.6 87.1 27.7 87.1Q31.7 87.1 33.8 84.6Q35.9 82.1 35.9 75.9V67.7Q35.9 60.9 33.4 57.9Q31 55 25.6 55H20.3V40.7H26Q30.7 40.7 33.1 38.3Q35.4 35.9 35.4 30.1V22.9Q35.4 17.7 33.3 15.3Q31.1 12.9 27.6 12.9Q20 12.9 20 22.1V28.7H5.1V23.4Q5.1 11.4 11.1 5Q17 -1.4 28.1 -1.4Q39.4 -1.4 45.3 4.9Q51.1 11.3 51.1 23.3V26.9Q51.1 35 48.4 39.9Q45.7 44.9 40 47V47.3Q46.1 49.6 48.9 54.7Q51.6 59.9 51.6 67.9V76.7Q51.6 88.7 45.6 95.1Q39.7 101.4 28.1 101.4Q16.6 101.4 10.6 95Q4.7 88.6 4.7 76.6Z"),
+    "4": (57.1, "M32.1 81.9H2.1V67.6L30.7 0H47.9V67.6H55.3V81.9H47.9V100H32.1ZM32.1 67.6V28.6H31.9L16.4 67.6Z"),
+    "5": (57.1, "M5.4 76.3V68.4H20.3V77.4Q20.3 87.1 28.4 87.1Q36.6 87.1 36.6 77.4V55Q36.6 45.1 28.4 45.1Q20.3 45.1 20.3 55V55.9H5.4L8.3 0H49.7V14.3H22.3L21 38.1H21.3Q25.7 30.9 34.9 30.9Q43.4 30.9 47.9 36.7Q52.3 42.6 52.3 53.7V76.3Q52.3 88.4 46.3 94.9Q40.3 101.4 28.9 101.4Q17.4 101.4 11.4 94.9Q5.4 88.4 5.4 76.3Z"),
+    "6": (57.1, "M5.1 76.3V24.6Q5.1 -1.4 29.1 -1.4Q40.6 -1.4 46.6 5.1Q52.6 11.6 52.6 23.7V25.6H37.7V22.7Q37.7 12.9 29.6 12.9Q25.1 12.9 23 15.6Q20.9 18.3 20.9 25.1V44.3H21.1Q25.3 35.6 35.4 35.6Q44 35.6 48.4 41.4Q52.9 47.3 52.9 58.4V76.3Q52.9 88.3 46.7 94.9Q40.6 101.4 29 101.4Q17.4 101.4 11.3 94.9Q5.1 88.3 5.1 76.3ZM37.1 77.4V59.7Q37.1 49.9 29 49.9Q20.9 49.9 20.9 59.7V77.4Q20.9 87.1 29 87.1Q37.1 87.1 37.1 77.4Z"),
+    "7": (57.1, "M36.6 14.3H4.9V0H52V13.7L27.4 100H11.4Z"),
+    "8": (57.1, "M4 76.7V67.9Q4 60.4 6.4 55.4Q8.9 50.3 14.3 47.4V47.1Q9.3 44.4 6.9 39.6Q4.6 34.9 4.6 27.4V23.3Q4.6 11.3 10.8 4.9Q17 -1.4 28.6 -1.4Q40.1 -1.4 46.4 4.9Q52.6 11.3 52.6 23.3V27.4Q52.6 41.7 42.9 47.1V47.4Q48.3 50.3 50.7 55.4Q53.1 60.4 53.1 67.9V76.7Q53.1 88.7 46.8 95.1Q40.4 101.4 28.6 101.4Q16.7 101.4 10.4 95.1Q4 88.7 4 76.7ZM36.9 30.7V22.9Q36.9 12.9 28.6 12.9Q20.3 12.9 20.3 22.9V30.7Q20.3 40.7 28.6 40.7Q36.9 40.7 36.9 30.7ZM37.4 75.9V66.3Q37.4 55 28.6 55Q19.7 55 19.7 66.3V75.9Q19.7 87.1 28.6 87.1Q37.4 87.1 37.4 75.9Z"),
+    "9": (57.1, "M4.6 76.3V74.4H19.4V77.3Q19.4 87.1 27.6 87.1Q32 87.1 34.1 84.4Q36.3 81.7 36.3 74.9V55.7H36Q31.9 64.4 21.7 64.4Q13.1 64.4 8.7 58.6Q4.3 52.7 4.3 41.6V23.7Q4.3 11.7 10.4 5.1Q16.6 -1.4 28.1 -1.4Q39.7 -1.4 45.9 5.1Q52 11.7 52 23.7V75.4Q52 101.4 28 101.4Q16.6 101.4 10.6 94.9Q4.6 88.4 4.6 76.3ZM36.3 40.3V22.6Q36.3 12.9 28.1 12.9Q20 12.9 20 22.6V40.3Q20 50.1 28.1 50.1Q36.3 50.1 36.3 40.3Z"),
+    ".": (26.9, "M5.9 84.9H21V100H5.9Z"),
+    "-": (38.6, "M3.6 42.9H35V57.1H3.6Z"),
+    "/": (55.6, "M40.7 0H54.3L14.9 100H1.3Z"),
+    ":": (26.9, "M5.9 30.4H21V45.6H5.9ZM5.9 84.9H21V100H5.9Z"),
+}
+SPACE = 22.9
 
 
 def dark_runs(qr):
@@ -56,21 +76,19 @@ def dark_runs(qr):
     return "".join(parts)
 
 
-def sparkle(x, y, r):
-    return f"M{x} {y - r}Q{x} {y} {x + r} {y}Q{x} {y} {x} {y + r}Q{x} {y} {x - r} {y}Q{x} {y} {x} {y - r}Z"
-
-
-def heart(x, y, s, fill):
-    return f'<path transform="translate({x} {y}) scale({s})" d="M0,8C-18,-4 -10,-16 0,-8C10,-16 18,-4 0,8Z" fill="{fill}"/>'
-
-
-def paw(x, y, s, fill):
-    toes = "".join(
-        f'<ellipse cx="{dx}" cy="{dy}" rx="4.6" ry="6.4" transform="rotate({rot} {dx} {dy})"/>'
-        for dx, dy, rot in ((-13, -3, -25), (-5, -13, -8), (5, -13, 8), (13, -3, 25))
-    )
-    pad = '<path d="M0,-2C8,-2 14,6 14,11C14,16 9,17 0,17C-9,17 -14,16 -14,11C-14,6 -8,-2 0,-2Z"/>'
-    return f'<g transform="translate({x} {y}) scale({s})" fill="{fill}">{toes}{pad}</g>'
+def text_group(text, cap, fill, x, y, anchor="start", track=4):
+    """Vector lettering with y at the top of the capitals; returns (svg, width in px)."""
+    text = text.upper()
+    advances = [GLYPHS.get(ch, (SPACE, ""))[0] for ch in text]
+    width = (sum(advances) + track * (len(text) - 1)) * cap / 100
+    x -= {"start": 0, "middle": width / 2, "end": width}[anchor]
+    parts, cx = [], 0.0
+    for ch, adv in zip(text, advances):
+        d = GLYPHS.get(ch, (SPACE, ""))[1]
+        if d:
+            parts.append(f'<path transform="translate({cx:.1f})" d="{d}"/>')
+        cx += adv + track
+    return f'<g transform="translate({x:.1f} {y:.1f}) scale({cap / 100:.4f})" fill="{fill}">{"".join(parts)}</g>', width
 
 
 def logo_group(x, y, size):
@@ -79,71 +97,68 @@ def logo_group(x, y, size):
     return f'<svg x="{x}" y="{y}" width="{size}" height="{size}" viewBox="0 0 400 400">{inner}</svg>'
 
 
-def poster_svg(qr):
+def poster_svg(qr, url):
     n = len(qr.matrix)
     m = 440 // (n + 8)  # whole-pixel modules keep the edges crisp
     panel = (n + 8) * m
-    w, border, pad, top_pad, badge, badge_y = 600, 8, 14, 62, 272, 22
-    card_w, card_h = panel + 2 * (pad + border), panel + top_pad + pad + 2 * border
-    card_x, card_y = (w - card_w) / 2, 232
-    qx, qy = card_x + border + pad, card_y + border + top_pad
-    ribbon_w, ribbon_h = 440, 92
-    ribbon_x, ribbon_y = (w - ribbon_w) / 2, qy + panel + 14
-    s, t = 0.5, 0.36
-    scan_x, scan_y = w / 2 - SCAN_ME_WIDTH * s / 2, ribbon_y + (ribbon_h - 100 * s) / 2 - 2
-    brand_x, brand_y = w / 2 - BRAND_WIDTH * t / 2, ribbon_y + ribbon_h + 26
-    h = round(brand_y + 100 * t + 30)
+    w, border, pad = 600, 5, 14
+    card = panel + 2 * (pad + border)
+    card_x, card_y = (w - card) / 2, 252
+    qx, qy = card_x + border + pad, card_y + border + pad
+    pill_w, pill_h = 340, 78
+    pill_x, pill_y = (w - pill_w) / 2, qy + panel + 14
+    cy = pill_y + pill_h / 2
+    parsed = urlparse(url)
+    shown = (parsed.netloc + parsed.path).rstrip("/")
+    url_y = pill_y + pill_h + 30
+    h = round(url_y + 18 + 40)
+
+    coffee, _ = text_group("COFFEE", 74, ESPRESSO, 236, 44)
+    guy, guy_w = text_group("GUY", 50, CREAM, 254, 140)
+    sub, _ = text_group("SOUTH INDIAN FILTER COFFEE", 13, ESPRESSO, 236, 218, track=9)
+    scan, _ = text_group("SCAN ME", 36, CREAM, w / 2, pill_y + (pill_h - 36) / 2, "middle", 6)
+    link, _ = text_group(shown, 18, ESPRESSO, w / 2, url_y, "middle", 8)
+
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}">
   <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#8fd0f2"/>
-      <stop offset=".55" stop-color="#d9f1fc"/>
-      <stop offset="1" stop-color="{CREAM}"/>
-    </linearGradient>
-    <pattern id="dots" width="36" height="36" patternUnits="userSpaceOnUse"><circle cx="18" cy="18" r="3" fill="#fff" opacity=".45"/></pattern>
-    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
+    <clipPath id="pp-inner"><rect x="26" y="26" width="{w - 52}" height="{h - 52}" rx="12"/></clipPath>
+    <filter id="pp-grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="5"/>
+      <feColorMatrix values="0 0 0 0 .45  0 0 0 0 .32  0 0 0 0 .2  0 0 0 .16 0"/>
+    </filter>
   </defs>
-  <rect width="{w}" height="{h}" fill="url(#sky)"/>
-  <rect width="{w}" height="{h}" fill="url(#dots)"/>
-  <g fill="#fff">
-    <ellipse cx="84" cy="96" rx="34" ry="13"/><ellipse cx="64" cy="104" rx="20" ry="10"/><ellipse cx="108" cy="104" rx="22" ry="10"/>
-    <ellipse cx="520" cy="62" rx="30" ry="12"/><ellipse cx="540" cy="70" rx="18" ry="9"/><ellipse cx="500" cy="70" rx="18" ry="9"/>
+  <rect width="{w}" height="{h}" fill="{PAPER}"/>
+  <rect width="{w}" height="{h}" filter="url(#pp-grain)"/>
+  <g clip-path="url(#pp-inner)" fill="none" stroke="#a9794a" stroke-linecap="round" opacity=".22">
+    <circle cx="44" cy="{h - 44}" r="58" stroke-width="7"/>
+    <circle cx="44" cy="{h - 44}" r="51" stroke-width="2"/>
   </g>
-  <path d="M0,{h - 118}C100,{h - 138} 200,{h - 132} 300,{h - 112}S500,{h - 120} 600,{h - 130}V{h + 10}H0Z" fill="#8fd07f" stroke="#3b2418" stroke-width="3"/>
-  <path d="M0,{h - 92}C120,{h - 108} 240,{h - 100} 330,{h - 94}S520,{h - 110} 600,{h - 98}V{h + 10}H0Z" fill="#a3dd93" stroke="#3b2418" stroke-width="3"/>
-  <g>
-    <circle cx="40" cy="{h - 62}" r="5.5" fill="#ff9db1"/><circle cx="40" cy="{h - 62}" r="2" fill="#ffe27a"/>
-    <circle cx="96" cy="{h - 34}" r="5" fill="#fff"/><circle cx="96" cy="{h - 34}" r="1.8" fill="#ffd45a"/>
-    <circle cx="560" cy="{h - 60}" r="5" fill="#fff"/><circle cx="560" cy="{h - 60}" r="1.8" fill="#ffd45a"/>
-    <circle cx="506" cy="{h - 32}" r="5.5" fill="#ff9db1"/><circle cx="506" cy="{h - 32}" r="2" fill="#ffe27a"/>
-  </g>
-  <rect x="{card_x}" y="{card_y + 14}" width="{card_w}" height="{card_h}" rx="40" fill="{ESPRESSO}" opacity=".25" filter="url(#blur)"/>
-  <rect x="{card_x}" y="{card_y}" width="{card_w}" height="{card_h}" rx="40" fill="{SAFFRON}" stroke="{ESPRESSO}" stroke-width="4"/>
-  <rect x="{card_x + border}" y="{card_y + border}" width="{card_w - 2 * border}" height="{card_h - 2 * border}" rx="32" fill="#fff"/>
+  <rect x="14" y="14" width="{w - 28}" height="{h - 28}" rx="20" fill="none" stroke="{ESPRESSO}" stroke-width="4"/>
+  <rect x="26" y="26" width="{w - 52}" height="{h - 52}" rx="12" fill="none" stroke="{SAFFRON}" stroke-width="1.8"/>
+
+  <circle cx="135" cy="135" r="85" fill="{ESPRESSO}"/>
+  {logo_group(44, 44, 170)}
+  {coffee}
+  <rect x="242" y="134" width="{guy_w + 36}" height="74" rx="10" fill="{SAFFRON}" stroke="{ESPRESSO}" stroke-width="3"/>
+  <rect x="236" y="128" width="{guy_w + 36}" height="74" rx="10" fill="{ESPRESSO}" stroke="{ESPRESSO}" stroke-width="3"/>
+  {guy}
+  {sub}
+
+  <rect x="{card_x + 10}" y="{card_y + 10}" width="{card}" height="{card}" rx="30" fill="{ESPRESSO}"/>
+  <rect x="{card_x}" y="{card_y}" width="{card}" height="{card}" rx="30" fill="#fff" stroke="{ESPRESSO}" stroke-width="{border}"/>
   <g transform="translate({qx + 4 * m} {qy + 4 * m}) scale({m})">
     <path d="{dark_runs(qr)}" fill="{ESPRESSO}" shape-rendering="crispEdges"/>
   </g>
-  <circle cx="{w / 2}" cy="{badge_y + badge / 2 + 8}" r="{badge / 2}" fill="{ESPRESSO}" opacity=".25" filter="url(#blur)"/>
-  {logo_group((w - badge) / 2, badge_y, badge)}
-  <rect x="{ribbon_x}" y="{ribbon_y + 8}" width="{ribbon_w}" height="{ribbon_h}" rx="46" fill="{CORAL_DARK}" stroke="{ESPRESSO}" stroke-width="4"/>
-  <rect x="{ribbon_x}" y="{ribbon_y}" width="{ribbon_w}" height="{ribbon_h}" rx="46" fill="{CORAL}" stroke="{ESPRESSO}" stroke-width="4"/>
-  <path d="M{ribbon_x + 44} {ribbon_y + 14}H{ribbon_x + ribbon_w - 44}" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".4"/>
-  {paw(ribbon_x + 46, ribbon_y + 50, 0.9, "#fff")}
-  {paw(ribbon_x + ribbon_w - 46, ribbon_y + 50, 0.9, "#fff")}
-  <g transform="translate({scan_x} {scan_y}) scale({s})" stroke-linejoin="round">
-    <path d="{SCAN_ME_PATH}" transform="translate(0 8)" fill="{ESPRESSO}" stroke="{ESPRESSO}" stroke-width="18"/>
-    <path d="{SCAN_ME_PATH}" fill="{ESPRESSO}" stroke="{ESPRESSO}" stroke-width="18"/>
-    <path d="{SCAN_ME_PATH}" fill="#fff"/>
+
+  <rect x="{pill_x + 6}" y="{pill_y + 7}" width="{pill_w}" height="{pill_h}" rx="{pill_h / 2}" fill="{SAFFRON}" stroke="{ESPRESSO}" stroke-width="3"/>
+  <rect x="{pill_x}" y="{pill_y}" width="{pill_w}" height="{pill_h}" rx="{pill_h / 2}" fill="{ESPRESSO}" stroke="{ESPRESSO}" stroke-width="3"/>
+  <g transform="translate({pill_x + 50} {cy})" fill="none" stroke="{SAFFRON}" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-15,-6V-15H-6M6,-15H15V-6M15,6V15H6M-6,15H-15V6"/>
+    <circle r="2.6" fill="{SAFFRON}" stroke="none"/>
   </g>
-  <path d="{sparkle(58, 200, 15)}" fill="#fff"/>
-  <path d="{sparkle(548, 176, 11)}" fill="#fff"/>
-  <path d="{sparkle(556, 300, 9)}" fill="{SAFFRON}"/>
-  {heart(40, ribbon_y + 40, 1.1, CORAL)}
-  {heart(560, ribbon_y + 54, 0.9, CORAL)}
-  <g transform="translate({brand_x} {brand_y}) scale({t})" stroke-linejoin="round">
-    <path d="{BRAND_PATH}" fill="#fff" stroke="#fff" stroke-width="16"/>
-    <path d="{BRAND_PATH}" fill="{ESPRESSO}"/>
-  </g>
+  {scan}
+  <path transform="translate({pill_x + pill_w - 50} {cy})" d="M0,11V-11M-9,-2L0,-11L9,-2" fill="none" stroke="{SAFFRON}" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+  {link}
 </svg>"""
     return svg, w, h
 
@@ -196,7 +211,7 @@ def main() -> None:
         qr.save(path, scale=scale, border=4)
         print(f"Saved {path}")
 
-    svg, w, h = poster_svg(qr)
+    svg, w, h = poster_svg(qr, args.url)
     svg_path = args.out / f"{args.name}-scan-me.svg"
     svg_path.write_text(svg, encoding="utf-8")
     print(f"Saved {svg_path}")
