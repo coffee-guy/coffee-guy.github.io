@@ -113,9 +113,10 @@ def poster_svg(qr, url):
     url_y = pill_y + pill_h + 30
     h = round(url_y + 18 + 40)
 
-    coffee, _ = text_group("COFFEE", 74, ESPRESSO, 236, 44)
-    guy, guy_w = text_group("GUY", 50, CREAM, 254, 140)
-    sub, _ = text_group("SOUTH INDIAN FILTER COFFEE", 13, ESPRESSO, 236, 218, track=9)
+    tx = 250  # left edge of the wordmark column, right of the logo badge
+    coffee, _ = text_group("COFFEE", 74, ESPRESSO, tx, 44)
+    guy, guy_w = text_group("GUY", 50, CREAM, tx + 18, 140)
+    sub, _ = text_group("MENU / MENY", 15, ESPRESSO, tx, 218, track=10)
     scan, _ = text_group("SCAN ME", 36, CREAM, w / 2, pill_y + (pill_h - 36) / 2, "middle", 6)
     link, _ = text_group(shown, 18, ESPRESSO, w / 2, url_y, "middle", 8)
 
@@ -136,11 +137,11 @@ def poster_svg(qr, url):
   <rect x="14" y="14" width="{w - 28}" height="{h - 28}" rx="20" fill="none" stroke="{ESPRESSO}" stroke-width="4"/>
   <rect x="26" y="26" width="{w - 52}" height="{h - 52}" rx="12" fill="none" stroke="{SAFFRON}" stroke-width="1.8"/>
 
-  <circle cx="135" cy="135" r="85" fill="{ESPRESSO}"/>
-  {logo_group(44, 44, 170)}
+  <circle cx="139" cy="139" r="95" fill="{ESPRESSO}"/>
+  {logo_group(38, 38, 190)}
   {coffee}
-  <rect x="242" y="134" width="{guy_w + 36}" height="74" rx="10" fill="{SAFFRON}" stroke="{ESPRESSO}" stroke-width="3"/>
-  <rect x="236" y="128" width="{guy_w + 36}" height="74" rx="10" fill="{ESPRESSO}" stroke="{ESPRESSO}" stroke-width="3"/>
+  <rect x="{tx + 6}" y="134" width="{guy_w + 36}" height="74" rx="10" fill="{SAFFRON}" stroke="{ESPRESSO}" stroke-width="3"/>
+  <rect x="{tx}" y="128" width="{guy_w + 36}" height="74" rx="10" fill="{ESPRESSO}" stroke="{ESPRESSO}" stroke-width="3"/>
   {guy}
   {sub}
 

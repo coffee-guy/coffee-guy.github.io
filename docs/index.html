@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Coffee Guy – South Indian filter coffee</title>
-  <meta name="description" content="Classic Mysore-style South Indian filter coffee. Small 15 kr, medium 20 kr. Klassiskt sydindiskt filterkaffe: liten 15 kr, medium 20 kr.">
+  <title>Coffee Guy – Menu</title>
+  <meta name="description" content="Coffee Guy menu: small 15 kr, medium 20 kr. Meny: liten 15 kr, medium 20 kr.">
   <meta name="theme-color" content="#2b1810">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Coffee Guy – South Indian filter coffee">
-  <meta property="og:description" content="Classic Mysore-style filter coffee. Small 15 kr, medium 20 kr.">
+  <meta property="og:title" content="Coffee Guy – Menu">
+  <meta property="og:description" content="Small 15 kr, medium 20 kr.">
   <meta property="og:image" content="https://coffee-guy.github.io/images/logo.png">
   <meta property="og:url" content="https://coffee-guy.github.io/">
   <link rel="icon" type="image/svg+xml" href="images/logo.svg">
@@ -25,7 +25,6 @@
     :root {
       --espresso: #2b1810;
       --roast: #5b3420;
-      --latte: #f6e3c8;
       --cream: #fff4e3;
       --milk: #fffaf1;
       --saffron: #f3b23c;
@@ -60,9 +59,7 @@
     }
     .lang:hover { background: rgba(255, 255, 255, .2); }
     .lang:focus-visible, .btn:focus-visible { outline: 3px solid var(--saffron); outline-offset: 3px; }
-    .eyebrow { margin: 0 0 .75rem; font-size: .78rem; letter-spacing: .18em; text-transform: uppercase; color: #ecc99b; }
-    h1 { margin: 0 0 1rem; font: 700 clamp(2.5rem, 12vw, 4.25rem)/1.05 var(--serif); }
-    .lead { max-width: 26rem; margin: 0 auto 1.75rem; font-size: 1.1rem; color: #f1dfc8; }
+    h1 { margin: 0 0 1.5rem; font: 700 clamp(2.5rem, 12vw, 4.25rem)/1.05 var(--serif); }
     .btn {
       display: inline-block;
       padding: .85rem 1.7rem;
@@ -94,25 +91,12 @@
     .card .price { flex: none; font-family: var(--serif); font-size: 1.15rem; color: var(--espresso); }
     .price b { font-size: 2.4rem; line-height: 1; }
 
-    .band { background: var(--latte); }
-    .steps { display: grid; gap: 1rem; max-width: 46rem; margin: 0 auto; padding: 0; list-style: none; counter-reset: step; text-align: left; }
-    @media (min-width: 860px) { .steps { grid-template-columns: repeat(3, 1fr); max-width: none; } }
-    .steps li { counter-increment: step; padding: 1.25rem 1.25rem 1.4rem; border-radius: 20px; background: var(--milk); box-shadow: 0 6px 18px rgba(43, 24, 16, .08); }
-    .steps li::before {
-      content: counter(step);
-      display: grid; place-items: center;
-      width: 2.2rem; height: 2.2rem; margin-bottom: .75rem;
-      border-radius: 50%; background: var(--espresso); color: var(--cream); font-weight: 700;
-    }
-    .steps h3 { margin: 0 0 .3rem; font: 700 1.25rem/1.25 var(--serif); color: var(--espresso); }
-    .steps p { margin: 0; color: var(--muted); }
-
     .footer { padding: 2rem 1.25rem 2.5rem; background: var(--espresso); color: #d9c3a8; text-align: center; font-size: .9rem; }
     .footer p { max-width: 34rem; margin: 0 auto .5rem; }
     .footer__brand { font: 700 1.15rem var(--serif); color: var(--cream); }
 
     @media (prefers-reduced-motion: no-preference) {
-      .card, .steps li { animation: rise .6s ease both; }
+      .card { animation: rise .6s ease both; }
       .card--medium { animation-delay: .12s; }
       @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
     }
@@ -122,58 +106,29 @@
   <header class="hero">
     <button class="lang" id="lang" type="button" hidden>Svenska</button>
     <img class="hero__logo" src="images/logo.svg" alt="" width="400" height="400">
-    <p class="eyebrow"><span lang="en">Classic Mysore filter coffee</span><span lang="sv">Klassiskt Mysore-filterkaffe</span></p>
     <h1>Coffee Guy</h1>
-    <p class="lead"><span lang="en">Strong, frothy South Indian filter coffee, served hot.</span><span lang="sv">Starkt, skummigt sydindiskt filterkaffe, serverat varmt.</span></p>
     <a class="btn" href="#menu"><span lang="en">See the menu</span><span lang="sv">Se menyn</span></a>
   </header>
 
   <main>
     <section class="section" id="menu" aria-labelledby="menu-title">
       <h2 id="menu-title"><span lang="en">Menu</span><span lang="sv">Meny</span></h2>
-      <p class="section__sub"><span lang="en">One classic. Two sizes.</span><span lang="sv">En klassiker. Två storlekar.</span></p>
+      <p class="section__sub"><span lang="en">Two sizes.</span><span lang="sv">Två storlekar.</span></p>
       <div class="cards">
         <article class="card card--small">
-          <div class="card__art"><img src="images/filter-coffee.svg" alt="" width="240" height="224" loading="lazy"></div>
+          <div class="card__art"><img src="images/coffee-cup.svg" alt="" width="240" height="224" loading="lazy"></div>
           <div class="card__body">
-            <div>
-              <h3><span lang="en">Small</span><span lang="sv">Liten</span></h3>
-              <p><span lang="en">A quick, strong pick-me-up.</span><span lang="sv">En snabb, stark uppiggare.</span></p>
-            </div>
+            <h3><span lang="en">Small</span><span lang="sv">Liten</span></h3>
             <p class="price"><b>15</b> kr</p>
           </div>
         </article>
         <article class="card card--medium">
-          <div class="card__art"><img src="images/filter-coffee.svg" alt="" width="240" height="224" loading="lazy"></div>
+          <div class="card__art"><img src="images/coffee-cup.svg" alt="" width="240" height="224" loading="lazy"></div>
           <div class="card__body">
-            <div>
-              <h3><span lang="en">Medium</span><span lang="sv">Medium</span></h3>
-              <p><span lang="en">A bigger cup to enjoy slowly.</span><span lang="sv">En större kopp att njuta av i lugn och ro.</span></p>
-            </div>
+            <h3><span lang="en">Medium</span><span lang="sv">Medium</span></h3>
             <p class="price"><b>20</b> kr</p>
           </div>
         </article>
-      </div>
-    </section>
-
-    <section class="band" aria-labelledby="story-title">
-      <div class="section">
-        <h2 id="story-title"><span lang="en">What is filter kaapi?</span><span lang="sv">Vad är filter kaapi?</span></h2>
-        <p class="section__sub"><span lang="en">South India's classic coffee, made the slow way.</span><span lang="sv">Sydindiens klassiska kaffe, bryggt långsamt.</span></p>
-        <ol class="steps">
-          <li>
-            <h3><span lang="en">Slow filter</span><span lang="sv">Långsamt filter</span></h3>
-            <p><span lang="en">Finely ground coffee drips slowly through a steel filter into a thick, dark decoction.</span><span lang="sv">Finmalet kaffe droppar långsamt genom ett stålfilter och blir ett tjockt, mörkt koncentrat.</span></p>
-          </li>
-          <li>
-            <h3><span lang="en">Hot milk</span><span lang="sv">Varm mjölk</span></h3>
-            <p><span lang="en">The decoction is mixed with hot milk and sugar.</span><span lang="sv">Koncentratet blandas med varm mjölk och socker.</span></p>
-          </li>
-          <li>
-            <h3><span lang="en">Back and forth</span><span lang="sv">Fram och tillbaka</span></h3>
-            <p><span lang="en">It is poured between the steel tumbler and the davara to cool it and raise a creamy froth.</span><span lang="sv">Kaffet hälls mellan stålbägaren och skålen (davara) för att svalna och bilda ett krämigt skum.</span></p>
-          </li>
-        </ol>
       </div>
     </section>
   </main>
@@ -187,7 +142,7 @@
     (function () {
       var root = document.documentElement;
       var btn = document.getElementById("lang");
-      var titles = { en: "Coffee Guy – South Indian filter coffee", sv: "Coffee Guy – Sydindiskt filterkaffe" };
+      var titles = { en: "Coffee Guy – Menu", sv: "Coffee Guy – Meny" };
       function sync() {
         document.title = titles[root.lang];
         btn.textContent = root.lang === "sv" ? "English" : "Svenska";
