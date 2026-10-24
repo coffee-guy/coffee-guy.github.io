@@ -87,6 +87,7 @@
     .card__body { padding: 1.25rem 1.5rem 1.5rem; }
     .card h3 { margin: 0 0 .15rem; font: 700 1.75rem/1.2 var(--serif); color: var(--espresso); }
     .note { margin: 0 0 .8rem; color: var(--muted); }
+    .menu-note { max-width: 34rem; margin: 1.75rem auto 0; color: var(--muted); font-size: .95rem; }
     .sizes { margin: 0; padding: 0; list-style: none; }
     .sizes li { display: flex; align-items: baseline; gap: .6rem; padding: .3rem 0; font-size: 1.1rem; color: var(--muted); }
     .sizes li::before { content: ""; order: 1; flex: 1; border-bottom: 2px dotted rgba(122, 90, 69, .4); }
@@ -121,7 +122,7 @@
           <div class="card__art"><img src="images/cups-saffron.svg" alt="" width="300" height="210" loading="lazy"></div>
           <div class="card__body">
             <h3>Classic</h3>
-            <p class="note"><span lang="en">With a little organic sweetener.</span><span lang="sv">Med lite ekologiskt sötningsmedel.</span></p>
+            <p class="note"><span lang="en">Contains added sugar.</span><span lang="sv">Innehåller tillsatt socker.</span></p>
             <ul class="sizes">
               <li><span><span lang="en">Small</span><span lang="sv">Liten</span></span><span class="price"><b>15</b> kr</span></li>
               <li><span><span lang="en">Medium</span><span lang="sv">Medium</span></span><span class="price"><b>20</b> kr</span></li>
@@ -132,7 +133,7 @@
           <div class="card__art"><img src="images/cups-teal.svg" alt="" width="300" height="210" loading="lazy"></div>
           <div class="card__body">
             <h3>Signature</h3>
-            <p class="note"><span lang="en">With a little more organic sweetener.</span><span lang="sv">Med lite mer ekologiskt sötningsmedel.</span></p>
+            <p class="note"><span lang="en">Contains a little more added sugar than Classic.</span><span lang="sv">Innehåller lite mer tillsatt socker än Classic.</span></p>
             <ul class="sizes">
               <li><span><span lang="en">Small</span><span lang="sv">Liten</span></span><span class="price"><b>15</b> kr</span></li>
               <li><span><span lang="en">Medium</span><span lang="sv">Medium</span></span><span class="price"><b>20</b> kr</span></li>
@@ -140,6 +141,7 @@
           </div>
         </article>
       </div>
+      <p class="menu-note"><span lang="en">For allergens and dietary needs, please ask us.</span><span lang="sv">Fråga oss om allergener och kostbehov.</span></p>
     </section>
   </main>
 
