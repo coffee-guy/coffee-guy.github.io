@@ -142,7 +142,7 @@ def hand(x, y, d, skin=None):
     return "".join(s)
 
 
-def cup(cx, cy, w=56, handle="right", steam=True, steam_col="#fff", lw=1.0):
+def cup(cx, cy, w=56, handle="right", steam=True, steam_col="#fff", lw=1.0, band_color=SAFF):
     """Ceramic cup on a saucer; (cx, cy) is the middle of the rim; lw scales every stroke."""
     s = []
     sau = ell(cx, cy + 30, w * .9, 10.5)
@@ -155,7 +155,7 @@ def cup(cx, cy, w=56, handle="right", steam=True, steam_col="#fff", lw=1.0):
         s.append(f'<path d="{hd}" fill="none" stroke="{OL}" stroke-width="{fmt(5 + 5.5 * lw)}" stroke-linecap="round"/>')
         s.append(f'<path d="{hd}" fill="none" stroke="#fffaf0" stroke-width="5" stroke-linecap="round"/>')
     body = f"M{fmt(cx - w / 2)} {fmt(cy)}C{fmt(cx - w / 2)} {fmt(cy + 26)} {fmt(cx - w / 4)} {fmt(cy + 33)} {fmt(cx)} {fmt(cy + 33)}C{fmt(cx + w / 4)} {fmt(cy + 33)} {fmt(cx + w / 2)} {fmt(cy + 26)} {fmt(cx + w / 2)} {fmt(cy)}Z"
-    band = f'<path d="M{fmt(cx - w / 2)} {fmt(cy + 11)}Q{fmt(cx)} {fmt(cy + 21)} {fmt(cx + w / 2)} {fmt(cy + 11)}" fill="none" stroke="{SAFF}" stroke-width="5"/>'
+    band = f'<path d="M{fmt(cx - w / 2)} {fmt(cy + 11)}Q{fmt(cx)} {fmt(cy + 21)} {fmt(cx + w / 2)} {fmt(cy + 11)}" fill="none" stroke="{band_color}" stroke-width="5"/>'
     s.append(shaded(body, "#fffaf0", "#dccfbd", (-7, -3), OL, 3 * lw, extra_clip=band))
     s.append(f'<ellipse cx="{fmt(cx)}" cy="{fmt(cy)}" rx="{fmt(w / 2)}" ry="8" fill="#fffaf0" stroke="{OL}" stroke-width="{fmt(3 * lw)}"/>')
     s.append(f'<ellipse cx="{fmt(cx)}" cy="{fmt(cy + 1)}" rx="{fmt(w / 2 - 4.5)}" ry="5.4" fill="#6a3a1f"/>')
