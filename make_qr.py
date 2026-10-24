@@ -97,7 +97,7 @@ def logo_group(x, y, size):
     return f'<svg x="{x}" y="{y}" width="{size}" height="{size}" viewBox="0 0 400 400">{inner}</svg>'
 
 
-def poster_svg(qr, url):
+def poster_svg(qr):
     n = len(qr.matrix)
     m = 440 // (n + 8)  # whole-pixel modules keep the edges crisp
     panel = (n + 8) * m
@@ -108,17 +108,13 @@ def poster_svg(qr, url):
     pill_w, pill_h = 340, 78
     pill_x, pill_y = (w - pill_w) / 2, qy + panel + 14
     cy = pill_y + pill_h / 2
-    parsed = urlparse(url)
-    shown = (parsed.netloc + parsed.path).rstrip("/")
-    url_y = pill_y + pill_h + 30
-    h = round(url_y + 18 + 40)
+    h = round(pill_y + pill_h + 70)
 
     tx = 250  # left edge of the wordmark column, right of the logo badge
     coffee, _ = text_group("COFFEE", 74, ESPRESSO, tx, 44)
     guy, guy_w = text_group("GUY", 50, CREAM, tx + 18, 140)
     sub, _ = text_group("MENU / MENY", 15, ESPRESSO, tx, 218, track=10)
     scan, _ = text_group("SCAN ME", 36, CREAM, w / 2, pill_y + (pill_h - 36) / 2, "middle", 6)
-    link, _ = text_group(shown, 18, ESPRESSO, w / 2, url_y, "middle", 8)
 
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}">
   <defs>
@@ -159,7 +155,6 @@ def poster_svg(qr, url):
   </g>
   {scan}
   <path transform="translate({pill_x + pill_w - 50} {cy})" d="M0,11V-11M-9,-2L0,-11L9,-2" fill="none" stroke="{SAFFRON}" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-  {link}
 </svg>"""
     return svg, w, h
 
@@ -212,7 +207,7 @@ def main() -> None:
         qr.save(path, scale=scale, border=4)
         print(f"Saved {path}")
 
-    svg, w, h = poster_svg(qr, args.url)
+    svg, w, h = poster_svg(qr)
     svg_path = args.out / f"{args.name}-scan-me.svg"
     svg_path.write_text(svg, encoding="utf-8")
     print(f"Saved {svg_path}")
