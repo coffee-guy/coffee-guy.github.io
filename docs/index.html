@@ -91,14 +91,13 @@
     .card h3 { margin: 0 0 .15rem; font: 700 1.75rem/1.2 var(--serif); color: var(--espresso); }
     .note { margin: 0 0 .8rem; color: var(--muted); }
     .sizes { margin: 0; padding: 0; list-style: none; }
-    .sizes li { display: flex; align-items: baseline; gap: .6rem; padding: .3rem 0; font-size: 1.1rem; color: var(--muted); }
-    .sizes li::before { content: ""; order: 1; flex: 1; border-bottom: 2px dotted rgba(122, 90, 69, .4); }
-    .sizes .price { order: 2; font-family: var(--serif); font-size: 1.15rem; color: var(--espresso); }
+    .sizes li { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; padding: .3rem 0; font-size: 1.1rem; color: var(--muted); }
+    .sizes .price { font-family: var(--serif); font-size: 1.15rem; color: var(--espresso); }
     .price b { font-size: 1.9rem; line-height: 1; }
 
     .pay { padding-top: 0; }
-    .swish { display: inline-block; margin: 0 0 .9rem; padding: .55rem 1.6rem; border-radius: 999px; background: var(--espresso); color: var(--saffron); font: 700 clamp(1.7rem, 8vw, 2.3rem)/1.2 var(--serif); letter-spacing: .08em; user-select: all; }
-    .pay .section__sub { margin: 0; }
+    .pay h2 { margin-bottom: 1rem; }
+    .swish { display: inline-block; margin: 0; padding: .55rem 1.6rem; border-radius: 999px; background: var(--espresso); color: var(--saffron); font: 700 clamp(1.7rem, 8vw, 2.3rem)/1.2 var(--serif); letter-spacing: .08em; user-select: all; }
 
     .fb { max-width: 30rem; margin: 0 auto; text-align: left; }
     .fb label, .fb__label { display: block; margin: 0 0 .35rem; font-weight: 600; color: var(--espresso); }
@@ -166,7 +165,6 @@
     <section class="section pay" id="pay" aria-labelledby="pay-title">
       <h2 id="pay-title"><span lang="en">Pay with Swish</span><span lang="sv">Betala med Swish</span></h2>
       <p class="swish">123XYZ</p>
-      <p class="section__sub"><span lang="en">Open the Swish app and pay to this number.</span><span lang="sv">Öppna Swish och betala till det här numret.</span></p>
     </section>
 
     <section class="section" id="feedback" aria-labelledby="fb-title" hidden>
@@ -219,7 +217,7 @@
     // FEEDBACK_URL is the private form endpoint that receives the messages (JSON POST, e.g. a Formspree form URL).
     (function () {
       var FEEDBACK_PUBLIC = false;
-      var FEEDBACK_URL = "";
+      var FEEDBACK_URL = "https://formspree.io/f/mnppjjwe";
       if (!FEEDBACK_PUBLIC && !new URLSearchParams(location.search).has("feedback")) return;
       document.getElementById("feedback").hidden = false;
       var form = document.getElementById("fb");
