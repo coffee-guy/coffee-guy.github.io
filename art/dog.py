@@ -40,7 +40,7 @@ def dog(cx=400, cy=452):
 
     # ---- head
     head = [(0, -64), (30, -62), (56, -48), (72, -22), (78, 8), (72, 36), (56, 58), (32, 72), (0, 78), (-32, 72), (-56, 58), (-72, 36), (-78, 8), (-72, -22), (-56, -48), (-30, -62)]
-    d, tips = fur(head, step=14, length=(4, 9), seed=5, grav=0.3, kind="cloud", lean=0.35)
+    d, tips = fur(head, step=11, length=(7, 15), seed=5, grav=1.0, kind="flame", lean=0.15)
     patch_r = [(80, -6), (70, -44), (44, -62), (16, -64), (8, -40), (14, -12), (12, 14), (30, 26), (54, 22), (74, 10)]
     patches = "".join(f'<path d="{D(p, t=0.9)}" fill="{TAN[0]}"/>' for p in (patch_r, mirror(patch_r, 0)))
     patch_hi = "".join(f'<path d="{D(p, t=0.9)}" fill="{TAN[2]}" opacity=".45" transform="translate(-8 -6) scale(.9)"/>' for p in (patch_r,))
@@ -49,7 +49,7 @@ def dog(cx=400, cy=452):
     h.append(shaded(d, WHITE[0], WHITE[1], (-8, -5), DOL, 3.2, extra_clip=patches + patch_hi + face_lines + cheeks))
     # beard fluff round the muzzle
     beard = [(-42, 36), (-44, 56), (-32, 72), (-12, 80), (0, 82), (12, 80), (32, 72), (44, 56), (42, 36)]
-    d, tips = fur(beard, step=12, length=(4, 8), seed=2, grav=0.5, kind="cloud", closed=False, lean=0.4)
+    d, tips = fur(beard, step=11, length=(6, 12), seed=2, grav=0.9, kind="flame", closed=False, lean=0.2)
     h.append(f'<path d="{d}Z" fill="{WHITE[0]}"/>')
     h.append(f'<path d="{d}" fill="none" stroke="{DOL}" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>')
     # eyes
@@ -78,7 +78,7 @@ def dog(cx=400, cy=452):
     for sx, jitter in ((-1, 0), (1, 3)):
         px = cx + sx * 34
         leg = [(px - 19, 534), (px + 19, 534), (px + 16, 566), (px + 14, 586), (px + 22, 602), (px + 14, 613), (px, 615), (px - 14, 613), (px - 22, 602), (px - 14, 586), (px - 16, 566)]
-        d, tips = fur(leg, step=9, length=(3, 6), seed=20 + jitter, grav=0.5, kind="cloud", skip=lambda a, b: a[1] < 590, lean=0.2)
+        d, tips = fur(leg, step=9, length=(3, 6), seed=20 + jitter, grav=0.8, kind="flame", skip=lambda a, b: a[1] < 590, lean=0.1)
         toes = "".join(f'<path d="M{px + k * 8} 603V612" stroke="{WHITE[2]}" stroke-width="2.2" stroke-linecap="round"/>' for k in (-1, 1))
         hair = f'<path d="M{px - 8} 540Q{px - 9} 566 {px - 9} 590M{px + 6} 540Q{px + 7} 566 {px + 8} 590" fill="none" stroke="{WHITE[2]}" stroke-width="1.8" stroke-linecap="round" opacity=".6"/>'
         front.append(shaded(d, WHITE[0], WHITE[1], (-5, -4), DOL, 3, extra_clip=toes + hair))

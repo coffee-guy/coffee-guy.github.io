@@ -1,7 +1,8 @@
 from chars import cup, hand, OL
 from lib import *  # noqa: F401,F403
 
-SKIN_M = ("#e9b58b", "#c98b62")
+SKIN_M = ("#fbe0cb", "#e8b799")
+SKIN_LINE = "#d29a7c"
 HAIR_M = ("#2b1e1a", "#150d0b", "#6b5851")
 DEN = ("#94a8be", "#6d8199", "#bccbdc")
 STITCH = "#d6e0ea"
@@ -50,7 +51,7 @@ def man(cx=595):
     h = []
     ears = "".join(
         f'<ellipse cx="{sx * 60}" cy="8" rx="9" ry="14" fill="{SKIN_M[0]}" stroke="{OL}" stroke-width="3"/>'
-        f'<path d="M{sx * 59} 1Q{sx * 64} 8 {sx * 59} 16" fill="none" stroke="#b27652" stroke-width="2" stroke-linecap="round"/>' for sx in (-1, 1))
+        f'<path d="M{sx * 59} 1Q{sx * 64} 8 {sx * 59} 16" fill="none" stroke="{SKIN_LINE}" stroke-width="2" stroke-linecap="round"/>' for sx in (-1, 1))
     h.append(ears)
     face = [(0, -58), (32, -55), (54, -38), (60, -8), (59, 20), (53, 46), (40, 66), (20, 80), (0, 84), (-20, 80), (-40, 66), (-53, 46), (-59, 20), (-60, -8), (-54, -38), (-32, -55)]
     fd = D(face)
@@ -59,7 +60,7 @@ def man(cx=595):
             '<path d="M-17 52Q-8 45 0 48Q8 45 17 52Q9 54 0 53Q-9 54 -17 52Z" fill="#3a251c" opacity=".55"/>'
             '<ellipse cx="-36" cy="42" rx="11" ry="6" fill="#e07a6a" opacity=".3"/><ellipse cx="36" cy="42" rx="11" ry="6" fill="#e07a6a" opacity=".3"/>')
     h.append(shaded(fd, SKIN_M[0], SKIN_M[1], (-5, -4), OL, 3.5, extra_clip=stub))
-    h.append('<path d="M-3 28Q0 36 6 31" fill="none" stroke="#b27652" stroke-width="2.2" stroke-linecap="round"/>')
+    h.append(f'<path d="M-3 28Q0 36 6 31" fill="none" stroke="{SKIN_LINE}" stroke-width="2.2" stroke-linecap="round"/>')
     h.append('<path d="M-14 62Q0 73 14 62" fill="none" stroke="#6b3526" stroke-width="2.8" stroke-linecap="round"/>')
     h.append('<path d="M-9 64Q0 71 9 64Q0 66 -9 64Z" fill="#fff6ee" opacity=".9"/>')
     # sunglasses
@@ -76,27 +77,16 @@ def man(cx=595):
     h.append('<path d="M-6 2Q0 -3 6 2" fill="none" stroke="#0d0c10" stroke-width="5" stroke-linecap="round"/>')
     h.append('<path d="M-50 0L-62 -2M50 0L62 -2" stroke="#0d0c10" stroke-width="4" stroke-linecap="round"/>')
     h.append('<path d="M-46 -17Q-28 -27 -8 -18M46 -17Q28 -27 8 -18" fill="none" stroke="#2a1a14" stroke-width="5.2" stroke-linecap="round"/>')
-    # hair: big wavy quiff
-    hair = [(-64, 26, "c"), (-72, 4), (-80, -26), (-78, -58), (-60, -88), (-30, -108), (6, -116), (42, -108), (68, -86), (80, -54), (78, -22), (72, 6), (66, 26, "c"),
-            (60, 8), (57, -18), (46, -34), (26, -42), (6, -38), (-12, -44), (-32, -42), (-48, -30), (-57, -12), (-60, 8)]
-    sheen = ('<path d="M-52 -80C-26 -104 16 -108 52 -88" fill="none" stroke="#6b5851" stroke-width="7" stroke-linecap="round" opacity=".8"/>'
-             '<path d="M-70 -44C-72 -20 -68 -4 -64 14" fill="none" stroke="#6b5851" stroke-width="4" stroke-linecap="round" opacity=".6"/>'
-             '<path d="M68 -62C74 -40 72 -20 68 -6" fill="none" stroke="#6b5851" stroke-width="3.5" stroke-linecap="round" opacity=".5"/>')
-    wav = "".join(f'<path d="{p}" fill="none" stroke="#0f0908" stroke-width="2" stroke-linecap="round" opacity=".7"/>' for p in (
-        "M-40 -96C-30 -80 -34 -64 -44 -50", "M-8 -106C0 -90 -4 -72 -14 -58", "M26 -104C34 -88 30 -70 22 -56", "M52 -90C58 -76 56 -62 50 -50",
-        "M-62 -30C-52 -22 -56 -10 -66 0", "M66 -30C58 -22 62 -10 70 0"))
-    hair_d, _ = fur(hair, step=15, length=(3, 6.5), seed=4, kind="cloud", t=0.9, skip=lambda a, b: abs(a[0]) < 63 and a[1] > -50, lean=0.1)
-    h.append(shaded(hair_d, HAIR_M[0], HAIR_M[1], (-6, -5), OL, 3.5, extra_clip=sheen + wav))
-    # fringe locks over the forehead
-    for lock in (
-        [(-40, -44, "c"), (-20, -50), (4, -46), (20, -36, "c"), (-4, -30), (-26, -32)],
-        [(6, -46, "c"), (26, -48), (48, -40), (56, -22, "c"), (40, -26), (22, -34)],
-    ):
-        h.append(shaded(D(lock, t=0.9), HAIR_M[0], HAIR_M[1], (-3, -3), OL, 3))
-    # locks curling by the ears
-    for sx in (-1, 1):
-        lock = [(sx * 62, 8, "c"), (sx * 74, 18), (sx * 70, 34, "c"), (sx * 62, 26), (sx * 58, 14)]
-        h.append(shaded(D(lock, t=0.9), HAIR_M[0], HAIR_M[1], (-3, -3), OL, 3))
+    # hair: short, smooth, side-swept cut with pointed bangs
+    hair = [(-63, 30, "c"), (-70, 8), (-75, -22), (-73, -52), (-58, -82), (-32, -102), (0, -110), (34, -106), (62, -88), (76, -58), (77, -26), (71, 4), (65, 30, "c"),
+            (59, 12), (58, -14), (52, -31, "c"), (30, -46), (22, -30, "c"), (-4, -48), (-12, -28, "c"), (-38, -46), (-46, -32, "c"), (-56, -14), (-60, 8)]
+    sheen = ('<path d="M-50 -76C-26 -98 16 -102 50 -84" fill="none" stroke="#6b5851" stroke-width="7" stroke-linecap="round" opacity=".8"/>'
+             '<path d="M-66 -48C-68 -26 -65 -8 -61 12" fill="none" stroke="#6b5851" stroke-width="4" stroke-linecap="round" opacity=".6"/>'
+             '<path d="M65 -56C71 -38 70 -18 66 -4" fill="none" stroke="#6b5851" stroke-width="3.5" stroke-linecap="round" opacity=".5"/>')
+    flow = "".join(f'<path d="{p}" fill="none" stroke="#0f0908" stroke-width="2" stroke-linecap="round" opacity=".7"/>' for p in (
+        "M8 -104C20 -90 28 -68 30 -50", "M-8 -106C-10 -90 -8 -70 -4 -52", "M-24 -102C-34 -86 -40 -68 -38 -50",
+        "M44 -96C56 -82 60 -62 56 -42", "M-46 -92C-62 -76 -68 -56 -62 -36"))
+    h.append(shaded(D(hair, t=0.9), HAIR_M[0], HAIR_M[1], (-6, -5), OL, 3.5, extra_clip=sheen + flow))
     back.append(f'<g transform="translate({cx} 276) rotate(-5 0 100)">{"".join(h)}</g>')
 
     # ---- arms (after the table)
