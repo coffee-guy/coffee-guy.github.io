@@ -59,7 +59,8 @@
     }
     .lang:hover { background: rgba(255, 255, 255, .2); }
     .lang:focus-visible, .btn:focus-visible { outline: 3px solid var(--saffron); outline-offset: 3px; }
-    h1 { margin: 0 0 1.5rem; font: 700 clamp(2.5rem, 12vw, 4.25rem)/1.05 var(--serif); }
+    h1 { margin: 0 0 .5rem; font: 700 clamp(2.5rem, 12vw, 4.25rem)/1.05 var(--serif); }
+    .tagline { max-width: 22rem; margin: 0 auto 1.75rem; font: italic 1.35rem/1.35 var(--serif); color: #f1dfc8; }
     .btn {
       display: inline-block;
       padding: .85rem 1.7rem;
@@ -69,6 +70,8 @@
       box-shadow: 0 6px 18px rgba(0, 0, 0, .3);
     }
     @media (hover: hover) { .btn { transition: transform .15s ease; } .btn:hover { transform: translateY(-2px); } }
+    button.btn { border: 0; font: inherit; font-weight: 700; cursor: pointer; }
+    .btn[disabled] { opacity: .6; cursor: default; }
     .hero__logo { width: min(60vw, 230px); margin: 0 auto 1.25rem; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .4)); }
 
     .section { max-width: 60rem; margin: 0 auto; padding: 3.5rem 1.25rem; text-align: center; }
@@ -93,6 +96,23 @@
     .sizes .price { order: 2; font-family: var(--serif); font-size: 1.15rem; color: var(--espresso); }
     .price b { font-size: 1.9rem; line-height: 1; }
 
+    .pay { padding-top: 0; }
+    .swish { display: inline-block; margin: 0 0 .9rem; padding: .55rem 1.6rem; border-radius: 999px; background: var(--espresso); color: var(--saffron); font: 700 clamp(1.7rem, 8vw, 2.3rem)/1.2 var(--serif); letter-spacing: .08em; user-select: all; }
+    .pay .section__sub { margin: 0; }
+
+    .fb { max-width: 30rem; margin: 0 auto; text-align: left; }
+    .fb label, .fb__label { display: block; margin: 0 0 .35rem; font-weight: 600; color: var(--espresso); }
+    .fb input[type="text"], .fb textarea { width: 100%; margin: 0 0 1rem; padding: .8rem 1rem; font: inherit; color: var(--ink); background: var(--milk); border: 1px solid #d9c3a8; border-radius: 14px; }
+    .fb textarea { min-height: 7rem; resize: vertical; }
+    .fb input:focus-visible, .fb textarea:focus-visible { outline: 3px solid var(--saffron); outline-offset: 2px; }
+    .stars { position: relative; display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: .15rem; margin: 0 0 1.1rem; }
+    .stars input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+    .stars label { margin: 0; font-size: 2.3rem; line-height: 1; color: #d9c3a8; cursor: pointer; }
+    .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: var(--saffron); }
+    .stars input:focus-visible + label { outline: 3px solid var(--saffron); outline-offset: 3px; border-radius: 6px; }
+    .hp { display: none; }
+    .fb__status { min-height: 1.5rem; margin: .9rem 0 0; color: var(--muted); }
+
     .footer { padding: 2rem 1.25rem 2.5rem; background: var(--espresso); color: #d9c3a8; text-align: center; font-size: .9rem; }
     .footer p { max-width: 34rem; margin: 0 auto .5rem; }
     .footer__brand { font: 700 1.15rem var(--serif); color: var(--cream); }
@@ -109,6 +129,7 @@
     <button class="lang" id="lang" type="button" hidden>Svenska</button>
     <img class="hero__logo" src="images/logo.svg" alt="" width="400" height="400">
     <h1>Coffee Guy</h1>
+    <p class="tagline"><span lang="en">Everything can wait. Coffee can't.</span><span lang="sv">Allt kan vänta. Kaffet kan inte.</span></p>
     <a class="btn" href="#menu"><span lang="en">See the menu</span><span lang="sv">Se menyn</span></a>
   </header>
 
@@ -121,7 +142,7 @@
           <div class="card__art"><img src="images/cups-saffron.svg" alt="" width="300" height="210" loading="lazy"></div>
           <div class="card__body">
             <h3>Classic</h3>
-            <p class="note"><span lang="en">Made with the usual coffee ingredients and lactose-free milk, and sweetened.</span><span lang="sv">Med vanliga kaffeingredienser, laktosfri mjölk och sötning.</span></p>
+            <p class="note"><span lang="en">Made with milk and lightly sweetened.</span><span lang="sv">Med mjölk och lite sötma.</span></p>
             <ul class="sizes">
               <li><span><span lang="en">Small</span><span lang="sv">Liten</span></span><span class="price"><b>15</b> kr</span></li>
               <li><span><span lang="en">Medium</span><span lang="sv">Medium</span></span><span class="price"><b>20</b> kr</span></li>
@@ -132,7 +153,7 @@
           <div class="card__art"><img src="images/cups-teal.svg" alt="" width="300" height="210" loading="lazy"></div>
           <div class="card__body">
             <h3>Signature</h3>
-            <p class="note"><span lang="en">Made with the usual coffee ingredients and lactose-free milk, and sweetened.</span><span lang="sv">Med vanliga kaffeingredienser, laktosfri mjölk och sötning.</span></p>
+            <p class="note"><span lang="en">Made with milk and a little extra sweetness.</span><span lang="sv">Med mjölk och lite extra sötma.</span></p>
             <ul class="sizes">
               <li><span><span lang="en">Small</span><span lang="sv">Liten</span></span><span class="price"><b>15</b> kr</span></li>
               <li><span><span lang="en">Medium</span><span lang="sv">Medium</span></span><span class="price"><b>20</b> kr</span></li>
@@ -140,6 +161,34 @@
           </div>
         </article>
       </div>
+    </section>
+
+    <section class="section pay" id="pay" aria-labelledby="pay-title">
+      <h2 id="pay-title"><span lang="en">Pay with Swish</span><span lang="sv">Betala med Swish</span></h2>
+      <p class="swish">123XYZ</p>
+      <p class="section__sub"><span lang="en">Open the Swish app and pay to this number.</span><span lang="sv">Öppna Swish och betala till det här numret.</span></p>
+    </section>
+
+    <section class="section" id="feedback" aria-labelledby="fb-title" hidden>
+      <h2 id="fb-title"><span lang="en">Leave feedback</span><span lang="sv">Lämna feedback</span></h2>
+      <p class="section__sub"><span lang="en">How was your coffee? Your feedback is private and only seen by us.</span><span lang="sv">Hur var ditt kaffe? Din feedback är privat och ses bara av oss.</span></p>
+      <form class="fb" id="fb" novalidate>
+        <p class="fb__label" id="rate-label"><span lang="en">Your rating</span><span lang="sv">Ditt betyg</span></p>
+        <div class="stars" role="radiogroup" aria-labelledby="rate-label">
+          <input type="radio" name="rating" id="r5" value="5" aria-label="5"><label for="r5" aria-hidden="true">★</label>
+          <input type="radio" name="rating" id="r4" value="4" aria-label="4"><label for="r4" aria-hidden="true">★</label>
+          <input type="radio" name="rating" id="r3" value="3" aria-label="3"><label for="r3" aria-hidden="true">★</label>
+          <input type="radio" name="rating" id="r2" value="2" aria-label="2"><label for="r2" aria-hidden="true">★</label>
+          <input type="radio" name="rating" id="r1" value="1" aria-label="1"><label for="r1" aria-hidden="true">★</label>
+        </div>
+        <label for="fb-msg"><span lang="en">Your feedback</span><span lang="sv">Din feedback</span></label>
+        <textarea id="fb-msg" name="message" rows="4" maxlength="1000"></textarea>
+        <label for="fb-name"><span lang="en">Name (optional)</span><span lang="sv">Namn (valfritt)</span></label>
+        <input type="text" id="fb-name" name="name" maxlength="60" autocomplete="given-name">
+        <input class="hp" type="text" name="_gotcha" autocomplete="off">
+        <button class="btn" type="submit" id="fb-send"><span lang="en">Send feedback</span><span lang="sv">Skicka feedback</span></button>
+        <p class="fb__status" id="fb-status" role="status" aria-live="polite"></p>
+      </form>
     </section>
   </main>
 
@@ -163,6 +212,47 @@
         sync();
       });
       sync();
+    })();
+  </script>
+  <script>
+    // The feedback form stays hidden from visitors until FEEDBACK_PUBLIC is true; add ?feedback to the address to preview it.
+    // FEEDBACK_URL is the private form endpoint that receives the messages (JSON POST, e.g. a Formspree form URL).
+    (function () {
+      var FEEDBACK_PUBLIC = false;
+      var FEEDBACK_URL = "";
+      if (!FEEDBACK_PUBLIC && !new URLSearchParams(location.search).has("feedback")) return;
+      document.getElementById("feedback").hidden = false;
+      var form = document.getElementById("fb");
+      var send = document.getElementById("fb-send");
+      var status = document.getElementById("fb-status");
+      var text = {
+        en: { empty: "Please choose a rating or write a message.", preview: "Preview only: feedback is not connected yet.", sending: "Sending…", error: "Something went wrong. Please try again.", thanks: "Thank you for your feedback!" },
+        sv: { empty: "Välj ett betyg eller skriv ett meddelande.", preview: "Endast förhandsvisning: feedback är inte kopplad ännu.", sending: "Skickar…", error: "Något gick fel. Försök igen.", thanks: "Tack för din feedback!" }
+      };
+      function say(key) { status.textContent = text[document.documentElement.lang][key]; }
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var data = new FormData(form);
+        if (data.get("_gotcha")) return;
+        var rating = data.get("rating");
+        var message = (data.get("message") || "").trim();
+        if (!rating && !message) return say("empty");
+        if (!FEEDBACK_URL) return say("preview");
+        send.disabled = true;
+        say("sending");
+        fetch(FEEDBACK_URL, {
+          method: "POST",
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify({ rating: rating, message: message, name: (data.get("name") || "").trim() })
+        }).then(function (r) {
+          if (!r.ok) throw new Error(r.status);
+          form.reset();
+          say("thanks");
+        }).catch(function () {
+          send.disabled = false;
+          say("error");
+        });
+      });
     })();
   </script>
 </body>
