@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Coffee Guy – Menu</title>
-  <meta name="description" content="Coffee Guy menu: Classic and Signature coffee, small 15 kr, medium 20 kr. Meny: Classic och Signature, liten 15 kr, medium 20 kr.">
+  <meta name="description" content="Coffee Guy menu: Classic and Signature coffee, small 15 kr, medium 25 kr. Meny: Classic och Signature, liten 15 kr, medium 25 kr.">
   <meta name="theme-color" content="#2b1810">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Coffee Guy – Menu">
-  <meta property="og:description" content="Classic and Signature coffee. Small 15 kr, medium 20 kr.">
+  <meta property="og:description" content="Classic and Signature coffee. Small 15 kr, medium 25 kr.">
   <meta property="og:image" content="https://coffee-guy.github.io/images/logo.png">
   <meta property="og:url" content="https://coffee-guy.github.io/">
   <link rel="icon" type="image/svg+xml" href="images/logo.svg">
@@ -92,8 +92,8 @@
     .note { margin: 0 0 .8rem; color: var(--muted); }
     .sizes { margin: 0; padding: 0; list-style: none; }
     .sizes li { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; padding: .3rem 0; font-size: 1.1rem; color: var(--muted); }
-    .sizes .price { font-family: var(--serif); font-size: 1.15rem; color: var(--espresso); }
-    .price b { font-size: 1.9rem; line-height: 1; }
+    .sizes .price { font-family: var(--serif); font-size: .805rem; color: var(--espresso); }
+    .price b { font-size: 1.33rem; line-height: 1; }
 
     .pay { padding-top: 0; }
     .pay h2 { margin-bottom: 1rem; }
@@ -144,7 +144,7 @@
             <p class="note"><span lang="en">Made with milk and lightly sweetened.</span><span lang="sv">Med mjölk och lite sötma.</span></p>
             <ul class="sizes">
               <li><span><span lang="en">Small</span><span lang="sv">Liten</span></span><span class="price"><b>15</b> kr</span></li>
-              <li><span><span lang="en">Medium</span><span lang="sv">Medium</span></span><span class="price"><b>20</b> kr</span></li>
+              <li><span><span lang="en">Medium</span><span lang="sv">Medium</span></span><span class="price"><b>25</b> kr</span></li>
             </ul>
           </div>
         </article>
@@ -155,7 +155,7 @@
             <p class="note"><span lang="en">Made with milk and a little extra sweetness.</span><span lang="sv">Med mjölk och lite extra sötma.</span></p>
             <ul class="sizes">
               <li><span><span lang="en">Small</span><span lang="sv">Liten</span></span><span class="price"><b>15</b> kr</span></li>
-              <li><span><span lang="en">Medium</span><span lang="sv">Medium</span></span><span class="price"><b>20</b> kr</span></li>
+              <li><span><span lang="en">Medium</span><span lang="sv">Medium</span></span><span class="price"><b>25</b> kr</span></li>
             </ul>
           </div>
         </article>
@@ -213,10 +213,10 @@
     })();
   </script>
   <script>
-    // The feedback form stays hidden from visitors until FEEDBACK_PUBLIC is true; add ?feedback to the address to preview it.
+    // Set FEEDBACK_PUBLIC to false to hide the feedback form from visitors (add ?feedback to the address to preview it).
     // FEEDBACK_URL is the private form endpoint that receives the messages (JSON POST, e.g. a Formspree form URL).
     (function () {
-      var FEEDBACK_PUBLIC = false;
+      var FEEDBACK_PUBLIC = true;
       var FEEDBACK_URL = "https://formspree.io/f/mnppjjwe";
       if (!FEEDBACK_PUBLIC && !new URLSearchParams(location.search).has("feedback")) return;
       document.getElementById("feedback").hidden = false;
