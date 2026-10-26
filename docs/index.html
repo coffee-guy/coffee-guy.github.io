@@ -80,17 +80,17 @@
 
     .cards { display: grid; gap: 1.5rem; max-width: 46rem; margin: 0 auto; }
     @media (min-width: 640px) { .cards { grid-template-columns: 1fr 1fr; } }
-    .card { overflow: hidden; border-radius: 28px; background: var(--milk); text-align: left; box-shadow: 0 12px 32px rgba(43, 24, 16, .14); }
+    .card { display: flex; flex-direction: column; overflow: hidden; border-radius: 28px; background: var(--milk); text-align: left; box-shadow: 0 12px 32px rgba(43, 24, 16, .14); }
     .card__art {
       display: flex; align-items: flex-end; justify-content: center;
       aspect-ratio: 3 / 2;
       background: radial-gradient(80% 75% at 50% 78%, #f7dfbc 0%, #e8bd8a 55%, #d49c63 100%);
     }
     .card__art img { width: 90%; }
-    .card__body { padding: 1.25rem 1.5rem 1.5rem; }
+    .card__body { flex: 1; display: flex; flex-direction: column; padding: 1.25rem 1.5rem 1.5rem; }
     .card h3 { margin: 0 0 .15rem; font: 700 1.75rem/1.2 var(--serif); color: var(--espresso); }
     .note { margin: 0 0 .8rem; color: var(--muted); }
-    .sizes { margin: 0; padding: 0; list-style: none; }
+    .sizes { margin: auto 0 0; padding: 0; list-style: none; }
     .sizes li { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; padding: .3rem 0; font-size: 1.1rem; color: var(--muted); }
     .sizes .price { font-family: var(--serif); font-size: .805rem; color: var(--espresso); }
     .price b { font-size: 1rem; line-height: 1; }
@@ -141,7 +141,7 @@
           <div class="card__art"><img src="images/cups-saffron.svg" alt="" width="300" height="210" loading="lazy"></div>
           <div class="card__body">
             <h3>Classic</h3>
-            <p class="note"><span lang="en">Made with milk and lightly sweetened.</span><span lang="sv">Med mjölk och lite sötma.</span></p>
+            <p class="note"><span lang="en">Made with milk and very lightly sweetened.</span><span lang="sv">Med mjölk och väldigt lite sötma.</span></p>
             <ul class="sizes">
               <li><span><span lang="en">Small</span><span lang="sv">Liten</span></span><span class="price"><b>15</b> kr</span></li>
               <li><span><span lang="en">Medium</span><span lang="sv">Medium</span></span><span class="price"><b>25</b> kr</span></li>
@@ -152,7 +152,7 @@
           <div class="card__art"><img src="images/cups-teal.svg" alt="" width="300" height="210" loading="lazy"></div>
           <div class="card__body">
             <h3>Signature</h3>
-            <p class="note"><span lang="en">Made with milk and lightly sweetened.</span><span lang="sv">Med mjölk och lite sötma.</span></p>
+            <p class="note"><span lang="en">Made with milk and Coffee Guy's signature sweetness.</span><span lang="sv">Med mjölk och Coffee Guys signatursötma.</span></p>
             <ul class="sizes">
               <li><span><span lang="en">Small</span><span lang="sv">Liten</span></span><span class="price"><b>15</b> kr</span></li>
               <li><span><span lang="en">Medium</span><span lang="sv">Medium</span></span><span class="price"><b>25</b> kr</span></li>
