@@ -192,7 +192,7 @@ def table():
 def petals(seed, n, box, z=None):
     r_ = random.Random(seed)
     x0, y0, x1, y1 = box
-    avoid = ((140, 205, 270, 360), (525, 195, 665, 360), (300, 335, 500, 560))
+    avoid = ((140, 195, 310, 385), (490, 195, 660, 385), (300, 335, 500, 560))
     out = []
     while len(out) < n:
         x, y = r_.uniform(x0, x1), r_.uniform(y0, y1)
@@ -203,17 +203,17 @@ def petals(seed, n, box, z=None):
 
 
 def build(parts):
-    import chars
     import dog as dog_mod
     import man as man_mod
+    import woman as woman_mod
 
     body, backs, fronts = [], [], []
     if "woman" in parts:
-        b, f = chars.woman(205)
+        b, f = woman_mod.woman()
         backs.append(b)
         fronts.append(f)
     if "man" in parts:
-        b, f = man_mod.man(595)
+        b, f = man_mod.man()
         backs.append(b)
         fronts.append(f)
     if "dog" in parts:

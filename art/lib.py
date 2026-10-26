@@ -3,6 +3,7 @@ import math
 import random
 
 _n = 0
+MIRROR = False  # set while drawing a mirrored group, so the light still comes from the upper left
 
 
 def nid():
@@ -132,6 +133,8 @@ def P(d, fill="none", stroke=None, sw=3, op=None, extra=""):
 
 def shaded(d, base, shade, off=(-6, -5), stroke="#2b1810", sw=3, extra_clip=""):
     """Flat form with a crescent of shade on the lower-right (light comes from the upper left)."""
+    if MIRROR:
+        off = (-off[0], off[1])
     cid = nid()
     s = f'<clipPath id="{cid}"><path d="{d}"/></clipPath>'
     s += f'<path d="{d}" fill="{shade}"/>'
