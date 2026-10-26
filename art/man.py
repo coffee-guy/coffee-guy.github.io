@@ -1,8 +1,8 @@
-from chars import cup, hand, OL
+from chars import cup, hand, OL, SKIN_W
 from lib import *  # noqa: F401,F403
 
-SKIN_M = ("#fbe0cb", "#e8b799")
-SKIN_LINE = "#d29a7c"
+SKIN_M = SKIN_W  # same skin tone as the woman
+SKIN_LINE = "#c58a68"  # the woman's nose-line colour
 HAIR_M = ("#2b1e1a", "#150d0b", "#6b5851")
 DEN = ("#94a8be", "#6d8199", "#bccbdc")
 STITCH = "#d6e0ea"
@@ -12,12 +12,28 @@ def stitched(d, w=1.8):
     return f'<path d="{d}" fill="none" stroke="{STITCH}" stroke-width="{w}" stroke-dasharray="5 4" stroke-linecap="round" opacity=".9"/>'
 
 
+def blade(ra, rb, tip, bend=8):
+    """Pointed lock tapering from the hidden base ra-rb to the tip; both edges bow the same way."""
+    def ctrl(a):
+        dx, dy = tip[0] - a[0], tip[1] - a[1]
+        L = math.hypot(dx, dy) or 1
+        return ((a[0] + tip[0]) / 2 - dy / L * bend, (a[1] + tip[1]) / 2 + dx / L * bend)
+    return f"M{pt(ra)}Q{pt(ctrl(ra))} {pt(tip)}Q{pt(ctrl(rb))} {pt(rb)}Z"
+
+
 def man(cx=595):
     back, front = [], []
     m = 2 * cx  # mirror helper: x' = m - x
+    head_t = f"translate({cx} 276) rotate(-5 0 100)"
 
     def mir(points):
         return mirror(points, cx)
+
+    # ---- hair hanging behind the neck
+    bh = [(-60, 8, "c"), (-68, 30), (-65, 54), (-52, 70, "c"), (-30, 62), (0, 66), (30, 62), (52, 70, "c"), (65, 54), (68, 30), (60, 8, "c")]
+    back_strands = "".join(f'<path d="{p}" fill="none" stroke="#0f0908" stroke-width="2" stroke-linecap="round" opacity=".7"/>' for p in (
+        "M-62 34C-63 46 -60 58 -54 66", "M62 34C63 46 60 58 54 66"))
+    back.append(f'<g transform="{head_t}">{shaded(D(bh, t=0.9), HAIR_M[0], HAIR_M[1], (-6, -5), OL, 3.5, extra_clip=back_strands)}</g>')
 
     # ---- neck
     neck = [(572, 326), (618, 326), (620, 372), (630, 400), (595, 410), (560, 400), (570, 372)]
@@ -57,8 +73,8 @@ def man(cx=595):
     fd = D(face)
     beard = D([(-62, 16), (-62, 92), (62, 92), (62, 16)], t=0.0)
     stub = (f'<path d="{beard}" fill="url(#lg-stub)"/>'
-            '<path d="M-17 52Q-8 45 0 48Q8 45 17 52Q9 54 0 53Q-9 54 -17 52Z" fill="#3a251c" opacity=".55"/>'
-            '<ellipse cx="-36" cy="42" rx="11" ry="6" fill="#e07a6a" opacity=".3"/><ellipse cx="36" cy="42" rx="11" ry="6" fill="#e07a6a" opacity=".3"/>')
+            '<path d="M-17 52Q-8 45 0 48Q8 45 17 52Q9 54 0 53Q-9 54 -17 52Z" fill="#3a251c" opacity=".35"/>'
+            '<ellipse cx="-36" cy="42" rx="11" ry="6" fill="#f38c8c" opacity=".34"/><ellipse cx="36" cy="42" rx="11" ry="6" fill="#f38c8c" opacity=".34"/>')
     h.append(shaded(fd, SKIN_M[0], SKIN_M[1], (-5, -4), OL, 3.5, extra_clip=stub))
     h.append(f'<path d="M-3 28Q0 36 6 31" fill="none" stroke="{SKIN_LINE}" stroke-width="2.2" stroke-linecap="round"/>')
     h.append('<path d="M-14 62Q0 73 14 62" fill="none" stroke="#6b3526" stroke-width="2.8" stroke-linecap="round"/>')
@@ -77,17 +93,26 @@ def man(cx=595):
     h.append('<path d="M-6 2Q0 -3 6 2" fill="none" stroke="#0d0c10" stroke-width="5" stroke-linecap="round"/>')
     h.append('<path d="M-50 0L-62 -2M50 0L62 -2" stroke="#0d0c10" stroke-width="4" stroke-linecap="round"/>')
     h.append('<path d="M-46 -17Q-28 -27 -8 -18M46 -17Q28 -27 8 -18" fill="none" stroke="#2a1a14" stroke-width="5.2" stroke-linecap="round"/>')
-    # hair: short, smooth, side-swept cut with pointed bangs
-    hair = [(-63, 30, "c"), (-70, 8), (-75, -22), (-73, -52), (-58, -82), (-32, -102), (0, -110), (34, -106), (62, -88), (76, -58), (77, -26), (71, 4), (65, 30, "c"),
-            (59, 12), (58, -14), (52, -31, "c"), (30, -46), (22, -30, "c"), (-4, -48), (-12, -28, "c"), (-38, -46), (-46, -32, "c"), (-56, -14), (-60, 8)]
-    sheen = ('<path d="M-50 -76C-26 -98 16 -102 50 -84" fill="none" stroke="#6b5851" stroke-width="7" stroke-linecap="round" opacity=".8"/>'
-             '<path d="M-66 -48C-68 -26 -65 -8 -61 12" fill="none" stroke="#6b5851" stroke-width="4" stroke-linecap="round" opacity=".6"/>'
-             '<path d="M65 -56C71 -38 70 -18 66 -4" fill="none" stroke="#6b5851" stroke-width="3.5" stroke-linecap="round" opacity=".5"/>')
+    # hair: medium length, loose and layered, falling over the ears; the locks sit behind the crown so only their tips show
+    outer = [(-58, 36, "c"), (-68, 14), (-74, -14), (-74, -46), (-63, -74), (-40, -96), (-8, -107), (22, -106), (50, -95), (67, -72), (75, -44), (76, -14), (72, 14), (63, 40, "c")]
+    inner = [(52, 30), (55, 8), (56, -14), (52, -28), (42, -36), (26, -44), (8, -52), (-14, -58, "c"), (-30, -48), (-44, -38), (-54, -22), (-57, -2), (-55, 22), (-51, 30)]
+    sheen = ('<path d="M-50 -78C-26 -100 16 -104 50 -86" fill="none" stroke="#6b5851" stroke-width="7" stroke-linecap="round" opacity=".8"/>'
+             '<path d="M-67 -44C-71 -22 -69 8 -62 32" fill="none" stroke="#6b5851" stroke-width="4" stroke-linecap="round" opacity=".6"/>'
+             '<path d="M68 -50C72 -30 71 0 64 30" fill="none" stroke="#6b5851" stroke-width="3.5" stroke-linecap="round" opacity=".5"/>')
     flow = "".join(f'<path d="{p}" fill="none" stroke="#0f0908" stroke-width="2" stroke-linecap="round" opacity=".7"/>' for p in (
-        "M8 -104C20 -90 28 -68 30 -50", "M-8 -106C-10 -90 -8 -70 -4 -52", "M-24 -102C-34 -86 -40 -68 -38 -50",
-        "M44 -96C56 -82 60 -62 56 -42", "M-46 -92C-62 -76 -68 -56 -62 -36"))
-    h.append(shaded(D(hair, t=0.9), HAIR_M[0], HAIR_M[1], (-6, -5), OL, 3.5, extra_clip=sheen + flow))
-    back.append(f'<g transform="translate({cx} 276) rotate(-5 0 100)">{"".join(h)}</g>')
+        "M-10 -104C14 -100 38 -88 50 -62", "M4 -106C34 -100 60 -82 68 -50", "M-16 -102C-32 -96 -50 -80 -60 -52",
+        "M-66 -12C-68 8 -64 22 -57 34", "M66 -10C68 10 64 24 58 36"))
+    locks = (
+        ((62, -20), (76, 4), (73, 54), 3),
+        ((-62, -20), (-76, 4), (-71, 48), -3),
+        ((-34, -64), (-8, -58), (6, -32), -6),
+        ((-16, -66), (16, -60), (54, -32), -8),
+        ((-56, -52), (-34, -48), (-42, -30), 5),
+    )
+    for ra, rb, tip, bend in locks:
+        h.append(shaded(blade(ra, rb, tip, bend), HAIR_M[0], HAIR_M[1], (-3, -3), OL, 3))
+    h.append(shaded(D(outer + inner, t=0.9), HAIR_M[0], HAIR_M[1], (-6, -5), OL, 3.5, extra_clip=sheen + flow))
+    back.append(f'<g transform="{head_t}">{"".join(h)}</g>')
 
     # ---- arms (after the table)
     sl_r = [(688, 396), (704, 418), (710, 470), (712, 530), (710, 586), (698, 612), (672, 626), (648, 630), (642, 606), (662, 596), (676, 584), (676, 530), (674, 470), (668, 424),
