@@ -33,7 +33,7 @@ def defs():
 <radialGradient id="lg-bulb"><stop offset="0" stop-color="#fff6c8" stop-opacity=".95"/><stop offset=".4" stop-color="#ffe08a" stop-opacity=".5"/><stop offset="1" stop-color="#ffd36a" stop-opacity="0"/></radialGradient>
 <radialGradient id="lg-sun" cx=".18" cy=".1" r=".75"><stop offset="0" stop-color="#fff7d6" stop-opacity=".75"/><stop offset=".5" stop-color="#ffeab0" stop-opacity=".18"/><stop offset="1" stop-color="#ffeab0" stop-opacity="0"/></radialGradient>
 <radialGradient id="lg-vig" cx=".5" cy=".5" r=".5"><stop offset=".72" stop-color="#3a1d10" stop-opacity="0"/><stop offset="1" stop-color="#3a1d10" stop-opacity=".2"/></radialGradient>
-<linearGradient id="lg-stub" gradientUnits="userSpaceOnUse" x1="0" y1="18" x2="0" y2="86"><stop offset="0" stop-color="#4a3026" stop-opacity="0"/><stop offset=".55" stop-color="#4a3026" stop-opacity=".12"/><stop offset="1" stop-color="#4a3026" stop-opacity=".2"/></linearGradient>
+<linearGradient id="lg-stub" gradientUnits="userSpaceOnUse" x1="0" y1="18" x2="0" y2="86"><stop offset="0" stop-color="#4a3026" stop-opacity="0"/><stop offset=".55" stop-color="#4a3026" stop-opacity=".26"/><stop offset="1" stop-color="#4a3026" stop-opacity=".4"/></linearGradient>
 <g id="lg-fl"><g fill="#fcd3df" stroke="#e98aa8" stroke-width="1.1" stroke-linejoin="round">
 <path d="M0 -1.5C-6 -4 -7 -11 -3.4 -13.6C-1.8 -14.8 -.6 -13.4 0 -12.2C.6 -13.4 1.8 -14.8 3.4 -13.6C7 -11 6 -4 0 -1.5Z" transform="rotate(0)"/>
 <path d="M0 -1.5C-6 -4 -7 -11 -3.4 -13.6C-1.8 -14.8 -.6 -13.4 0 -12.2C.6 -13.4 1.8 -14.8 3.4 -13.6C7 -11 6 -4 0 -1.5Z" transform="rotate(72)"/>
@@ -192,7 +192,7 @@ def table():
 def petals(seed, n, box, z=None):
     r_ = random.Random(seed)
     x0, y0, x1, y1 = box
-    avoid = ((140, 195, 310, 385), (490, 195, 660, 385), (300, 335, 500, 560))
+    avoid = ((140, 205, 270, 360), (525, 195, 665, 360), (300, 335, 500, 560))
     out = []
     while len(out) < n:
         x, y = r_.uniform(x0, x1), r_.uniform(y0, y1)
@@ -203,17 +203,17 @@ def petals(seed, n, box, z=None):
 
 
 def build(parts):
+    import chars
     import dog as dog_mod
     import man as man_mod
-    import woman as woman_mod
 
     body, backs, fronts = [], [], []
     if "woman" in parts:
-        b, f = woman_mod.woman()
+        b, f = chars.woman(205)
         backs.append(b)
         fronts.append(f)
     if "man" in parts:
-        b, f = man_mod.man()
+        b, f = man_mod.man(595)
         backs.append(b)
         fronts.append(f)
     if "dog" in parts:
