@@ -6,6 +6,7 @@
   <title>Coffee Guy – Menu</title>
   <meta name="description" content="Coffee Guy menu: Classic and Signature coffee, small 15 kr, medium 25 kr. Meny: Classic och Signature, liten 15 kr, medium 25 kr.">
   <meta name="theme-color" content="#2b1810">
+  <meta name="format-detection" content="telephone=no">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Coffee Guy – Menu">
   <meta property="og:description" content="Classic and Signature coffee. Small 15 kr, medium 25 kr.">
@@ -87,19 +88,20 @@
       background: radial-gradient(80% 75% at 50% 78%, #f7dfbc 0%, #e8bd8a 55%, #d49c63 100%);
     }
     .card__art img { width: 90%; }
-    .card__body { flex: 1; display: flex; flex-direction: column; padding: 1.25rem 1.5rem 1.5rem; }
+    .card__body { flex: 1; display: flex; flex-direction: column; padding: 1.25rem 1.5rem 1.5rem; container-type: inline-size; }
     .card h3 { margin: 0 0 .15rem; font: 700 1.75rem/1.2 var(--serif); color: var(--espresso); }
     .note { margin: 0 0 .8rem; color: var(--muted); }
     .sizes { margin: auto 0 0; padding: 0; list-style: none; }
     .sizes li { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; padding: .3rem 0; font-size: 1.1rem; color: var(--muted); }
     .sizes .price { font-family: var(--serif); font-size: .805rem; color: var(--espresso); }
     .price b { font-size: 1rem; line-height: 1; }
-    .tip { margin: .9rem 0 0; padding: .6rem .85rem; border-left: 4px solid var(--saffron); border-radius: 4px 14px 14px 4px; background: #fbefd9; color: var(--ink); font-size: .92rem; line-height: 1.45; }
+    .tip { margin: .9rem 0 0; padding: .6rem .7rem; border-left: 4px solid var(--saffron); border-radius: 4px 14px 14px 4px; background: #fbefd9; color: var(--ink); font-size: clamp(.6rem, 3.9cqi, .92rem); line-height: 1.45; white-space: nowrap; }
     .tip b { color: var(--roast); }
 
     .pay { padding-top: 0; }
     .pay h2 { margin-bottom: 1rem; }
     .swish { display: inline-block; margin: 0; padding: .55rem 1.6rem; border: 2px solid var(--saffron); border-radius: 999px; background: var(--cream); color: var(--espresso); font: 700 clamp(1.7rem, 8vw, 2.3rem)/1.2 var(--serif); letter-spacing: .08em; user-select: all; }
+    .swish a { color: inherit; text-decoration: none; }
 
     .fb { max-width: 30rem; margin: 0 auto; text-align: left; }
     .fb label, .fb__label { display: block; margin: 0 0 .35rem; font-weight: 600; color: var(--espresso); }
