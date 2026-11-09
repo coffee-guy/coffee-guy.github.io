@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src https://formspree.io; form-action 'self'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Coffee Guy – Menu</title>
   <meta name="description" content="Coffee Guy menu: Classic and Signature coffee, small 15 kr, medium 25 kr. Meny: Classic och Signature, liten 15 kr, medium 25 kr.">
@@ -14,14 +16,7 @@
   <meta property="og:url" content="https://coffee-guy.github.io/">
   <link rel="icon" type="image/svg+xml" href="images/logo.svg">
   <link rel="apple-touch-icon" href="images/logo.png">
-  <script>
-    // ?lang=sv|en wins, otherwise the browser language.
-    (function () {
-      var q = new URLSearchParams(location.search).get("lang");
-      var l = (q || navigator.language || "en").slice(0, 2).toLowerCase();
-      document.documentElement.lang = l === "sv" ? "sv" : "en";
-    })();
-  </script>
+  <script src="js/lang.js"></script>
   <style>
     :root {
       --espresso: #2b1810;
@@ -201,63 +196,6 @@
     <p class="footer__brand">Coffee Guy</p>
   </footer>
 
-  <script>
-    (function () {
-      var root = document.documentElement;
-      var btn = document.getElementById("lang");
-      var titles = { en: "Coffee Guy – Menu", sv: "Coffee Guy – Meny" };
-      function sync() {
-        document.title = titles[root.lang];
-        btn.textContent = root.lang === "sv" ? "English" : "Svenska";
-      }
-      btn.hidden = false;
-      btn.addEventListener("click", function () {
-        root.lang = root.lang === "sv" ? "en" : "sv";
-        sync();
-      });
-      sync();
-    })();
-  </script>
-  <script>
-    // Set FEEDBACK_PUBLIC to false to hide the feedback form from visitors (add ?feedback to the address to preview it).
-    // FEEDBACK_URL is the private form endpoint that receives the messages (JSON POST, e.g. a Formspree form URL).
-    (function () {
-      var FEEDBACK_PUBLIC = true;
-      var FEEDBACK_URL = "https://formspree.io/f/mnppjjwe";
-      if (!FEEDBACK_PUBLIC && !new URLSearchParams(location.search).has("feedback")) return;
-      document.getElementById("feedback").hidden = false;
-      var form = document.getElementById("fb");
-      var send = document.getElementById("fb-send");
-      var status = document.getElementById("fb-status");
-      var text = {
-        en: { empty: "Please choose a rating or write a message.", preview: "Preview only: feedback is not connected yet.", sending: "Sending…", error: "Something went wrong. Please try again.", thanks: "Thank you for your feedback!" },
-        sv: { empty: "Välj ett betyg eller skriv ett meddelande.", preview: "Endast förhandsvisning: feedback är inte kopplad ännu.", sending: "Skickar…", error: "Något gick fel. Försök igen.", thanks: "Tack för din feedback!" }
-      };
-      function say(key) { status.textContent = text[document.documentElement.lang][key]; }
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var data = new FormData(form);
-        if (data.get("_gotcha")) return;
-        var rating = data.get("rating");
-        var message = (data.get("message") || "").trim();
-        if (!rating && !message) return say("empty");
-        if (!FEEDBACK_URL) return say("preview");
-        send.disabled = true;
-        say("sending");
-        fetch(FEEDBACK_URL, {
-          method: "POST",
-          headers: { "Accept": "application/json", "Content-Type": "application/json" },
-          body: JSON.stringify({ rating: rating, message: message, name: (data.get("name") || "").trim() })
-        }).then(function (r) {
-          if (!r.ok) throw new Error(r.status);
-          form.reset();
-          say("thanks");
-        }).catch(function () {
-          send.disabled = false;
-          say("error");
-        });
-      });
-    })();
-  </script>
+  <script src="js/app.js"></script>
 </body>
 </html>
